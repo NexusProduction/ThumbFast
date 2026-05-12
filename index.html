@@ -44,7 +44,7 @@ html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
-  color: var(--text-1);
+  color: #ffffff; /* Brighter base text */
   min-height: 100vh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -55,7 +55,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 200;
-  height: 64px; /* Increased height */
+  height: 76px; /* Made header bigger */
   background: rgba(0,0,0,0.85);
   border-bottom: 1px solid var(--border-1);
   backdrop-filter: blur(24px) saturate(180%);
@@ -80,7 +80,7 @@ body {
 }
 
 .wordmark-icon {
-  width: 32px; height: 32px; /* Increased size */
+  width: 38px; height: 38px; /* Bigger logo icon */
   background: var(--accent);
   border-radius: 8px;
   display: flex;
@@ -90,7 +90,7 @@ body {
 .wordmark-icon svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
 .wordmark-text {
-  font-size: 20px; /* Increased text size */
+  font-size: 24px; /* Bigger logo text */
   font-weight: 700;
   color: var(--text-1);
   letter-spacing: -0.03em;
@@ -101,6 +101,13 @@ body {
   font-size: 10px;
   color: var(--text-3);
   letter-spacing: 0.06em;
+}
+.metrics-section-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; /* Bigger */
+  font-weight: 700;
+  color: #ffffff; /* White text for visibility */
+  letter-spacing: 0.1em;
 }
 
 /* ── LAYOUT ── */
@@ -195,7 +202,7 @@ body {
   background: transparent;
   border: none;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 16px;
 }
 .context-textarea::placeholder { color: var(--text-4); font-style: normal; font-size: 14px; }
 
@@ -646,9 +653,9 @@ body {
 
 .metric-status { 
   font-family: inherit; 
-  font-size: 11px; 
+  font-size: 13px; /* Bigger text */
   font-weight: 600; 
-  color: var(--text-2); 
+  color: #ffffff; /* White text for visibility */
   margin-top: 10px; 
   letter-spacing: 0.02em; 
   display: flex; 
@@ -1279,14 +1286,14 @@ function buildCard(img, res, index, multi) {
   const rankLabels  = ['Best Performer','Runner Up','Solid Pick','Needs Work','Underperformer'];
 
   let rankHtml = '';
-  if (multi) {
-    const isGold = index === 0;
-    rankHtml = `<div class="card-rank-bar ${isGold ? 'rank-gold' : ''}">
-      <span class="rank-emoji">${rankEmojis[index] || String(index+1)}</span>
-      <span class="rank-label">${rankLabels[index] || `Rank ${index+1}`}</span>
-      <span class="rank-score-pill">${res?.overall || 0} / 100</span>
-    </div>`;
-  }
+  // Comparison banner
+  const count = images.length;
+  const metaEl = document.getElementById('results-meta');
+  metaEl.textContent = count === 1 ? '1 Thumbnail Analyzed' : `${count} Thumbnails Analyzed · Ranked by Score`;
+  metaEl.style.fontSize = '16px'; // Make text bigger
+  metaEl.style.color = '#ffffff'; // Increase visibility
+  metaEl.style.fontWeight = '500';
+  compBannerWrap.innerHTML = '';
 
   const v = res?.verdict || 'AVERAGE';
   const scores = res?.scores || {};
@@ -1298,6 +1305,25 @@ function buildCard(img, res, index, multi) {
     { key: 'clickability',    label: 'Clickability' },
     { key: 'visualHierarchy', label: 'Visual Hierarchy' }
   ];
+  // ─── Recommendations ───
+  const recs = res?.recommendations || [{ priority: 'MED', action: 'No specific recommendations.' }];
+  const recsHtml = recs.map(rec => {
+    const cls = rec.priority === 'HIGH' ? 'prio-high' : rec.priority === 'MED' ? 'prio-mid' : 'prio-low';
+    return `
+      <li class="rec-item">
+        <div class="rec-bullet ${cls}">${rec.priority}</div>
+        <span>${escHtml(rec.action)}</span>
+      </li>
+    `;
+  }).join('');
+
+  // ─── Strengths / Weaknesses ───
+  const strengths = res?.strengths || [];
+  const weaknesses = res?.weaknesses || [];
+  const strengthsHtml = strengths.map(s => `<li>${escHtml(s)}</li>`).join('') || '<li>–</li>';
+  const weaknessesHtml = weaknesses.map(w => `<li>${escHtml(w)}</li>`).join('') || '<li>–</li>';
+
+  // ─── CTR chip ───
 
   const metricsHtml = metricDefs.map(m => {
     const val = scores[m.key] || 0;
