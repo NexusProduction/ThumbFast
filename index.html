@@ -65,7 +65,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--void);
   color: var(--text-1);
   min-height: 100vh;
@@ -357,7 +357,7 @@ body::before {
   position: relative;
   border-radius: var(--r-lg);
   overflow: hidden; 
-  border: 1.5px solid var(--border-mid);
+  border: 1.5px solid var(--border-mid); /* This adds the proper border */
   transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease);
   background: var(--surface);
 }
@@ -1518,7 +1518,7 @@ body::before {
   padding: 28px 0;
   margin-top: 80px;
   text-align: center;
-  position: relative;
+  position: relative; /* Fixed: Removed permanent sticky pinning */
   width: 100%;
   background: var(--void);
   z-index: 1;
@@ -1986,11 +1986,11 @@ function renderPreviews() {
   previewGrid.innerHTML = '';
   
   if (images.length === 0) {
-    previewGrid.style.display = 'none'; // Hide if no images
+    previewGrid.style.display = 'none'; // Completely hides the squares if 0 images
     return;
   }
   
-  previewGrid.style.display = 'grid'; // Show grid
+  previewGrid.style.display = 'grid'; // Shows grid when images exist
 
   // Render actual images
   images.forEach((img, i) => {
@@ -2022,7 +2022,6 @@ function renderPreviews() {
     });
   });
 }
-
 function removeImage(id) {
   images = images.filter(img => img.id !== id);
   renderPreviews();
@@ -2390,31 +2389,17 @@ analyzeBtn.addEventListener('click', async () => {
 
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-/* ═══════════════════════════════════════════════════════════
-   BUILD RESULTS UI
-═══════════════════════════════════════════════════════════ */
 function buildResultsUI() {
   compBannerWrap.innerHTML = '';
   cardsWrap.innerHTML = '';
 
   const multi = images.length > 1;
 
-  // Comparison banner
-  if (multi) {
-    const winner = images[0];
-    const winnerScore = winner.aiResult?.overall || 0;
-    const scoreChips = images.map((img, i) =>
-      `<span class="comp-score-chip ${i === 0 ? 'winner' : ''}">
-      </span>`
-    ).join('');
-
-// Comparison banner
+  // Comparison banner logic
   if (multi) {
     document.getElementById('results-meta').textContent = 'Analysis matrix loaded - Image One Win forced variant check.';
-    compBannerWrap.innerHTML = ''; 
   } else {
     document.getElementById('results-meta').textContent = 'Analysis matrix loaded.';
-    compBannerWrap.innerHTML = '';
   }
 
   // Result cards
