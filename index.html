@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ThumbFast — Thumbnail Intelligence</title>
+<title>ThumbFast — AI Thumbnail Intelligence</title>
+<script src="https://unpkg.com/lucide@latest"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:         #000000;
@@ -42,7 +42,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--text-1);
   min-height: 100vh;
@@ -159,38 +159,45 @@ body {
   border-radius: 100px;
   transition: color 0.2s, border-color 0.2s;
 }
+.btn-run {
+  flex-shrink: 0;
+  background: #FFFFFF;
+  color: #000000;
+  border: none;
+  border-radius: 100px;
+  padding: 12px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
 .char-chip.valid { color: var(--green); border-color: rgba(48,209,88,0.3); }
 .char-chip.warn  { color: var(--amber); border-color: rgba(255,159,10,0.3); }
 .char-chip.error { color: var(--red);   border-color: rgba(255,69,58,0.3); }
 
 .text-input-wrap {
-  border: 1px solid var(--border-2);
-  border-radius: var(--radius-lg);
-  background: var(--surface-2);
-  overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s;
   position: relative;
+  border-radius: 12px;
+  overflow: hidden; 
+  border: 1px solid #333333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: #111111;
 }
+
 .text-input-wrap:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-dim);
+  border-color: #FFFFFF;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 .context-textarea {
   width: 100%;
-  min-height: 100px;
-  padding: 16px 18px;
+  min-height: 110px;
+  padding: 16px 18px 16px;
   background: transparent;
   border: none;
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
   font-size: 15px;
-  font-weight: 400;
-  color: var(--text-1);
-  resize: none;
-  outline: none;
-  line-height: 1.6;
 }
-.context-textarea::placeholder { color: var(--text-4); font-style: normal; }
+.context-textarea::placeholder { color: var(--text-4); font-style: normal; font-size: 14px; }
 
 .char-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; }
 .char-bar-fill {
@@ -222,9 +229,11 @@ body {
 .image-count-chip.has-images { color: var(--accent); border-color: rgba(0,113,227,0.3); background: var(--accent-dim); }
 
 .drop-zone {
-  border: 1px dashed var(--border-2);
-  border-radius: var(--radius-lg);
-  padding: 40px 24px;
+  position: relative;
+  background: #111111;
+  border: 1px dashed #444444;
+  border-radius: 12px;
+  padding: 44px 24px;
   text-align: center;
   cursor: pointer;
   background: var(--surface-2);
@@ -232,9 +241,10 @@ body {
   position: relative;
   overflow: hidden;
 }
-.drop-zone:hover, .drop-zone.over {
-  border-color: var(--accent);
-  background: var(--surface-3);
+.drop-zone:hover,
+.drop-zone.over {
+  border-color: #FFFFFF;
+  background: #1A1A1A;
 }
 
 .drop-icon-wrap {
@@ -634,7 +644,17 @@ body {
 .bar-average   { background: var(--amber); }
 .bar-poor      { background: var(--red); }
 
-.metric-status { font-family: 'JetBrains Mono', 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-2); margin-top: 8px; letter-spacing: 0.04em; }
+.metric-status { 
+  font-family: inherit; 
+  font-size: 11px; 
+  font-weight: 600; 
+  color: var(--text-2); 
+  margin-top: 10px; 
+  letter-spacing: 0.02em; 
+  display: flex; 
+  align-items: center; 
+  gap: 5px; 
+}
 .metric-status.s-excellent { color: var(--green); }
 .metric-status.s-good      { color: var(--accent); }
 .metric-status.s-average   { color: var(--amber); }
@@ -684,11 +704,13 @@ body {
 .tag-MED  { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,159,10,0.25); }
 .tag-LOW  { background: var(--green-dim); color: var(--green); border: 1px solid rgba(48,209,88,0.25); }
 
-/* ── FOOTER ── */
 .site-footer {
-  border-top: 1px solid var(--border-1);
-  padding: 24px 32px;
+  border-top: 1px solid #222222;
+  padding: 32px 0;
+  margin-top: 40px;
   text-align: center;
+  width: 100%;
+  background: #000000;
 }
 .site-footer p {
   font-family: 'DM Mono', monospace;
@@ -751,16 +773,19 @@ body {
 
       <div class="field-block">
         <div class="field-label-row">
-          <label class="field-label" for="ctx-textarea">Video Title &amp; Description</label>
+          <label class="field-label" for="ctx-textarea">
+            <span class="label-lg">Enter video title or keyword</span>
+          </label>
           <span class="char-chip" id="char-chip">0 / 200</span>
         </div>
         <div class="text-input-wrap" id="text-input-wrap">
           <textarea
             id="ctx-textarea"
             class="context-textarea"
+            minlength="5"
             maxlength="200"
             rows="4"
-            placeholder="e.g. '10 Productivity Hacks That Changed My Life — motivational tech video for young professionals'"
+            placeholder="Enter your video title or target keyword here..."
           ></textarea>
           <div class="char-bar"><div class="char-bar-fill" id="char-bar-fill"></div></div>
         </div>
@@ -768,8 +793,8 @@ body {
       </div>
 
       <div class="field-block" style="margin-bottom:0">
-        <div class="upload-label-row">
-          <span class="field-label">Thumbnail Images</span>
+        <div class="upload-section-label">
+          <span>Thumbnail Images</span>
           <span class="image-count-chip" id="img-count-chip">0 / 5 uploaded</span>
         </div>
 
@@ -963,7 +988,11 @@ function uid() { return Math.random().toString(36).slice(2, 10); }
 
 function renderPreviews() {
   previewGrid.innerHTML = '';
-  if (images.length === 0) { previewGrid.style.display = 'none'; return; }
+  
+  if (images.length === 0) {
+    previewGrid.style.display = 'none'; 
+    return;
+  }
   previewGrid.style.display = 'grid';
 
   images.forEach((img, i) => {
@@ -1236,7 +1265,10 @@ function buildResultsUI() {
   analyzeBtn.style.display = 'none';
 
   resultsSection.classList.add('active');
-  setTimeout(() => resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+  if(window.lucide) { lucide.createIcons(); }
+  setTimeout(() => {
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
 }
 
 function buildCard(img, res, index, multi) {
@@ -1270,7 +1302,12 @@ function buildCard(img, res, index, multi) {
   const metricsHtml = metricDefs.map(m => {
     const val = scores[m.key] || 0;
     const cls = val >= 85 ? 'excellent' : val >= 70 ? 'good' : val >= 55 ? 'average' : 'poor';
-    const statusLabels = { excellent: '✓ STRONG', good: '~ GOOD', average: '⚠ NEEDS WORK', poor: '✗ WEAK' };
+    const icons = { 
+      excellent: '<i data-lucide="check-circle" style="width:14px;height:14px;"></i> STRONG', 
+      good: '<i data-lucide="check" style="width:14px;height:14px;"></i> GOOD', 
+      average: '<i data-lucide="alert-circle" style="width:14px;height:14px;"></i> NEEDS WORK', 
+      poor: '<i data-lucide="x-circle" style="width:14px;height:14px;"></i> WEAK' 
+    };
     return `<div class="metric-tile">
       <div class="metric-top">
         <span class="metric-name">${m.label}</span>
@@ -1279,7 +1316,7 @@ function buildCard(img, res, index, multi) {
       <div class="metric-bar">
         <div class="metric-bar-inner bar-${cls}" style="width:${val}%"></div>
       </div>
-      <div class="metric-status s-${cls}">${statusLabels[cls]}</div>
+      <div class="metric-status s-${cls}">${icons[cls]}</div>
     </div>`;
   }).join('');
 
@@ -1315,8 +1352,11 @@ function resetApp() {
   images = [];
   uploadedHashes = [];
   ctxTextarea.value = '';
-  ctxTextarea.dispatchEvent(new Event('input'));
-  renderPreviews();
+  ctxTextarea.dispatchEvent(new Event('input')); 
+  
+  previewGrid.innerHTML = '';
+  previewGrid.style.display = 'none'; // Forces squares to disappear
+  
   updateImgChip();
   resultsSection.classList.remove('active');
   cardsWrap.innerHTML = '';
@@ -1327,6 +1367,11 @@ function resetApp() {
 }
 
 window.resetApp = resetApp;
+
+document.addEventListener("DOMContentLoaded", () => {
+    if(window.lucide) { lucide.createIcons(); }
+});
 </script>
+
 </body>
 </html>
