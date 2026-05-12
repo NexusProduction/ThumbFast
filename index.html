@@ -217,10 +217,16 @@ body::before {
   line-height: 1.1;
   letter-spacing: -0.05em;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, var(--text-1) 0%, #9BB0FF 100%);
+  background: linear-gradient(90deg, #fff 0%, var(--blue-bright) 50%, #fff 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: shineText 3s linear infinite;
+}
+
+@keyframes shineText { 
+  to { background-position: 200% center; } 
 }
 
 .hero p {
@@ -309,15 +315,27 @@ body::before {
   margin-left: 2px;
 }
 
-.char-chip {
+.char-chip, .image-count-chip {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: var(--text-3);
-  background: var(--surface);
-  border: 1px solid var(--border);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 3px 10px;
   border-radius: 100px;
   transition: color var(--t) var(--ease), border-color var(--t) var(--ease);
+}
+
+/* Add the Error Pulse Animation for the textarea */
+@keyframes redPulse {
+  0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); border-color: var(--red); }
+  70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); border-color: var(--red); }
+  100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+}
+
+.error-pulse {
+  animation: redPulse 0.8s ease-out;
+  border-color: var(--red) !important;
 }
 
 .char-chip.valid {
@@ -375,18 +393,20 @@ body::before {
 }
 
 .char-bar {
-  height: 2px;
-  border-radius: 1px;
-  background: var(--border);
-  margin-top: 8px;
-  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: transparent;
 }
 
 .char-bar-fill {
   height: 100%;
-  border-radius: 1px;
+  border-radius: 0px;
   background: var(--blue-bright);
-  transition: width 0.15s var(--ease), background 0.15s var(--ease);
+  transition: width 0.2s var(--ease), background 0.15s var(--ease);
+  width: 0%;
 }
 
 .char-bar-fill.over { background: var(--red); }
@@ -1624,52 +1644,43 @@ body::before {
 ═══════════════════════════════════════════════════════════ -->
 <main class="page-main">
 
-  <!-- HERO -->
   <section class="hero">
     <h1>AI Thumbnail Intelligence</h1>
-    <p>Upload up to 5 thumbnails and let our vision engine perform a 3000-parameter deep scan — ranking, scoring, and prescribing precise improvements for each.</p>
+    <p>Upload up to 5 thumbnails. Our vision engine ranks, scores, and prescribes exact improvements.</p>
   </section>
 
   <!-- CONTROL PANEL -->
   <section class="control-panel">
-
-    <div class="panel-topbar">
-      <span class="panel-topbar-title">INPUT CONFIGURATION</span>
-      <div class="panel-topbar-dots">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-
     <div class="panel-body">
 
-      <!-- TEXT CONTEXT FIELD -->
       <div class="field-block">
         <div class="field-label-row">
           <label class="field-label" for="ctx-textarea">
-            Please enter title and description<span class="req">*</span>
+            Please enter title and description
           </label>
           <span class="char-chip" id="char-chip">0 / 200</span>
         </div>
-        <p class="field-desc">// Required · min 5 chars · max 200 chars</p>
-        <div class="text-input-wrap">
+        <div class="text-input-wrap" id="text-input-wrap" style="padding-bottom: 3px;">
           <textarea
             id="ctx-textarea"
             class="context-textarea"
             minlength="5"
             maxlength="200"
             rows="4"
-            placeholder="e.g. &quot;10 Hours Eating Only Blue Foods Challenge — featuring giant blue cake and ocean-blue ramen showdown&quot;"
+            placeholder="e.g. &quot;10 Hours Eating Only Blue Foods...&quot;"
+            style="border: none; background: transparent; width: 100%; outline: none;"
           ></textarea>
+          <div class="char-bar">
+            <div class="char-bar-fill" id="char-bar-fill"></div>
+          </div>
         </div>
-        <div class="char-bar">
-          <div class="char-bar-fill" id="char-bar-fill" style="width:0%"></div>
-        </div>
+        <div id="text-error" style="color: var(--red); font-size: 12px; margin-top: 8px; display: none; font-weight: 500;">Too less details, at least 5 characters required.</div>
       </div>
 
       <!-- UPLOAD ZONE -->
       <div class="field-block" style="margin-bottom:0">
         <div class="upload-section-label">
-          <span>Thumbnail Images<span class="req" style="color:var(--blue-bright);margin-left:3px">*</span></span>
+          <span>Thumbnail Images</span>
           <span class="image-count-chip" id="img-count-chip">0 / 5 uploaded</span>
         </div>
 
@@ -1696,17 +1707,13 @@ body::before {
         <div class="preview-grid" id="preview-grid"></div>
 
         <!-- Per-image description inputs -->
-        <div class="img-desc-grid" id="desc-grid"></div>
+        <div id="img-error-msg" style="color: var(--red); font-size: 13px; margin-top: 10px; display: none; font-weight: 500;"></div>
 
       </div>
     </div>
 
-    <div class="panel-footer" style="margin: 0 32px 32px; padding-top: 24px;">
-      <div class="panel-footer-hint">
-        <strong>3,000 Parameters Scanned</strong><br>
-        Color · Contrast · Typography · Emotion · CTR Prediction
-      </div>
-      <button class="btn-run" id="analyze-btn" disabled>
+    <div class="panel-footer" style="margin: 0 32px 32px; padding-top: 24px; justify-content: flex-end;">
+      <button class="btn-run" id="analyze-btn">
         <svg viewBox="0 0 24 24">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
         </svg>
@@ -1758,23 +1765,18 @@ body::before {
      LOADING OVERLAY
 ═══════════════════════════════════════════════════════════ -->
 <div class="scan-overlay" id="scan-overlay">
-  <div class="scan-core">
-
-    <div class="scan-graphic">
+  <div class="scan-core" style="max-width: 350px;">
+    <div class="scan-graphic" style="width: 50px; height: 50px; margin: 0 auto 24px;">
       <div class="scan-ring scan-ring-1"></div>
       <div class="scan-ring scan-ring-2"></div>
-      <div class="scan-ring scan-ring-3"></div>
       <div class="scan-center">
         <svg viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
     </div>
-
-    <div class="scan-title">Vision Engine Active</div>
-    <div class="scan-subtitle" id="scan-subtitle">Initializing 3000-parameter deep scan…</div>
-
+    <div class="scan-title" style="font-size: 20px;">Vision Engine Active</div>
+    <div class="scan-subtitle" id="scan-subtitle" style="margin-bottom: 24px;">Processing visual intelligence...</div>
     <div class="progress-wrap">
       <div class="progress-labels">
         <span class="progress-label-l">SCANNING</span>
@@ -1784,39 +1786,8 @@ body::before {
         <div class="progress-fill" id="progress-fill"></div>
       </div>
     </div>
-
-    <div class="scan-param-box">
-      <div class="scan-param-header">CURRENT PARAMETER</div>
-      <div class="scan-param-current" id="scan-param-current">Awaiting scan…</div>
-      <div class="scan-param-fraction">
-        <b id="scan-count">0</b> of <b>3000</b> parameters analyzed
-      </div>
-
-      <div class="scan-phase-list" id="scan-phase-list">
-        <div class="scan-phase-item" id="phase-0">
-          <div class="scan-phase-dot"></div>Color Extraction & Harmony Analysis
-        </div>
-        <div class="scan-phase-item" id="phase-1">
-          <div class="scan-phase-dot"></div>Contrast & Luminance Depth Scan
-        </div>
-        <div class="scan-phase-item" id="phase-2">
-          <div class="scan-phase-dot"></div>Facial Detection & Emotion Mapping
-        </div>
-        <div class="scan-phase-item" id="phase-3">
-          <div class="scan-phase-dot"></div>Text Readability & Typography Score
-        </div>
-        <div class="scan-phase-item" id="phase-4">
-          <div class="scan-phase-dot"></div>CTR Prediction Model (AI)
-        </div>
-        <div class="scan-phase-item" id="phase-5">
-          <div class="scan-phase-dot"></div>Competitive Benchmarking
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
-
 <!-- HIDDEN CANVAS -->
 <canvas id="analysis-canvas"></canvas>
 
@@ -1859,19 +1830,17 @@ const compBannerWrap= document.getElementById('comparison-banner-wrap');
 const cardsWrap     = document.getElementById('cards-wrap');
 const canvas        = document.getElementById('analysis-canvas');
 const ctx2d         = canvas.getContext('2d', { willReadFrequently: true });
-
-/* ───────────────────────────────────────────────
-   TEXTAREA — CHAR COUNTER
-─────────────────────────────────────────────── */
 ctxTextarea.addEventListener('input', () => {
   const len = ctxTextarea.value.length;
-  const pct = Math.min(100, (len / MAX_CHARS) * 100);
+  // Progress bar only starts filling AFTER 5 characters
+  const pct = len <= 5 ? 0 : Math.min(100, ((len - 5) / (MAX_CHARS - 5)) * 100);
 
   charChip.textContent = `${len} / ${MAX_CHARS}`;
   charBarFill.style.width = pct + '%';
 
   charChip.className = 'char-chip';
   charBarFill.classList.remove('over');
+  document.getElementById('text-error').style.display = 'none';
 
   if (len === 0) {
     charChip.className = 'char-chip';
@@ -1883,8 +1852,6 @@ ctxTextarea.addEventListener('input', () => {
   } else {
     charChip.className = 'char-chip valid';
   }
-
-  checkReady();
 });
 
 /* ───────────────────────────────────────────────
@@ -1903,15 +1870,20 @@ fileHidden.addEventListener('change', e => {
   fileHidden.value = '';
 });
 
-/* ───────────────────────────────────────────────
-   FILE INGESTION
-─────────────────────────────────────────────── */
 function ingestFiles(rawFiles) {
-  const newFiles = Array.from(rawFiles).filter(f => f.type.startsWith('image/'));
+  let newFiles = Array.from(rawFiles).filter(f => f.type.startsWith('image/'));
+  const errorMsg = document.getElementById('img-error-msg');
+  
   if (images.length + newFiles.length > MAX_IMGS) {
-    alert(`Max ${MAX_IMGS} images allowed. You currently have ${images.length}.`);
-    return;
+    const allowed = MAX_IMGS - images.length;
+    newFiles = newFiles.slice(0, allowed);
+    errorMsg.textContent = `Max 5 images allowed. Extra images were ignored.`;
+    errorMsg.style.display = 'block';
+    setTimeout(() => errorMsg.style.display = 'none', 4000);
+  } else {
+    errorMsg.style.display = 'none';
   }
+
   newFiles.forEach(file => {
     const reader = new FileReader();
     reader.onload = e => {
@@ -1919,14 +1891,11 @@ function ingestFiles(rawFiles) {
         id: uid(),
         file,
         dataUrl: e.target.result,
-        desc: '',
         pixelData: null,
         aiResult: null
       });
       renderPreviews();
-      renderDescInputs();
       updateImgChip();
-      checkReady();
     };
     reader.readAsDataURL(file);
   });
@@ -2006,22 +1975,18 @@ function renderDescInputs() {
 function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-/* ───────────────────────────────────────────────
-   IMAGE COUNT CHIP
-─────────────────────────────────────────────── */
 function updateImgChip() {
   imgCountChip.textContent = `${images.length} / ${MAX_IMGS} uploaded`;
   imgCountChip.className = images.length > 0 ? 'image-count-chip has-images' : 'image-count-chip';
+  // Hide drop zone if 5 images uploaded
+  dropZone.style.display = images.length >= MAX_IMGS ? 'none' : 'block';
 }
 
-/* ───────────────────────────────────────────────
-   READY CHECK
-─────────────────────────────────────────────── */
-function checkReady() {
-  const textLen = ctxTextarea.value.length;
-  const ok = textLen >= MIN_CHARS && textLen <= MAX_CHARS && images.length > 0;
-  analyzeBtn.disabled = !ok;
+// Remove `checkReady` completely as we handle validity on click/hover now.
+function removeImage(id) {
+  images = images.filter(img => img.id !== id);
+  renderPreviews();
+  updateImgChip();
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2220,31 +2185,6 @@ function pixelFallback(px) {
   };
 }
 
-/* ═══════════════════════════════════════════════════════════
-   LOADING ANIMATION MANAGER
-═══════════════════════════════════════════════════════════ */
-const PARAM_LABELS = [
-  'Extracting color channels…',
-  'Mapping hue histogram…',
-  'Measuring saturation bands…',
-  'Calculating luminance gradient…',
-  'Detecting edge sharpness…',
-  'Analyzing focal composition…',
-  'Scanning text regions…',
-  'Running OCR pass…',
-  'Assessing font weight…',
-  'Measuring text-background contrast ratio…',
-  'Detecting face landmarks…',
-  'Mapping emotional expression…',
-  'Analyzing eye-contact vector…',
-  'Measuring rule-of-thirds alignment…',
-  'Calculating visual weight distribution…',
-  'Running click-prediction model…',
-  'Benchmarking against 10K thumbnails…',
-  'Predicting scroll-stop probability…',
-  'Scoring color harmony against wheel…',
-  'Finalizing CTR regression…'
-];
 
 const PHASES = 6;
 
@@ -2252,55 +2192,23 @@ function startLoader() {
   scanOverlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  const totalParams = 3000;
   let current = 0;
-  let phaseIdx = 0;
-  const phaseSize = Math.floor(totalParams / PHASES);
-  let labelIdx = 0;
-
-  // Reset phases
-  for (let i = 0; i < PHASES; i++) {
-    const el = document.getElementById(`phase-${i}`);
-    if (el) { el.className = 'scan-phase-item'; }
-  }
-
   const tick = setInterval(() => {
-    const increment = Math.floor(Math.random() * 35) + 12;
-    current = Math.min(totalParams, current + increment);
+    // Random increment to simulate work
+    current += Math.random() * 2.5;
+    if (current > 100) current = 100;
 
-    const pct = Math.floor((current / totalParams) * 100);
+    const pct = Math.floor(current);
     progressFill.style.width = pct + '%';
     progressPct.textContent = pct + '%';
-    scanCount.textContent = current.toLocaleString();
 
-    // Rotate through parameter labels
-    if (current % 120 < 35) {
-      labelIdx = Math.floor(Math.random() * PARAM_LABELS.length);
-    }
-    scanParamCur.textContent = `[${String(current).padStart(4,'0')}] ${PARAM_LABELS[labelIdx]}`;
-
-    // Advance phases
-    const newPhase = Math.min(PHASES - 1, Math.floor(current / phaseSize));
-    if (newPhase > phaseIdx) {
-      const prev = document.getElementById(`phase-${phaseIdx}`);
-      if (prev) prev.className = 'scan-phase-item complete';
-      phaseIdx = newPhase;
-    }
-    const curPhaseEl = document.getElementById(`phase-${phaseIdx}`);
-    if (curPhaseEl) curPhaseEl.className = 'scan-phase-item active';
-
-    if (current >= totalParams) {
+    if (current >= 100) {
       clearInterval(tick);
-      scanCount.textContent = '3,000';
       progressFill.style.width = '100%';
       progressPct.textContent = '100%';
-      scanParamCur.textContent = '[3000] Scan complete — compiling results…';
-      for (let i = 0; i < PHASES; i++) {
-        const el = document.getElementById(`phase-${i}`);
-        if (el) el.className = 'scan-phase-item complete';
-      }
+      document.getElementById('scan-subtitle').textContent = 'Scan complete — compiling results...';
     }
-  }, 55);
+  }, 60);
 
   return tick;
 }
@@ -2309,18 +2217,46 @@ function stopLoader(timer) {
   clearInterval(timer);
   scanOverlay.classList.remove('active');
   document.body.style.overflow = 'auto';
+  // Reset for next time
+  document.getElementById('scan-subtitle').textContent = 'Processing visual intelligence...';
+  progressFill.style.width = '0%';
+  progressPct.textContent = '0%';
 }
+// Validation on Hover
+analyzeBtn.addEventListener('mouseenter', () => {
+  const textLen = ctxTextarea.value.trim().length;
+  if (textLen < MIN_CHARS) {
+    const wrap = document.getElementById('text-input-wrap');
+    wrap.classList.add('error-pulse');
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => wrap.classList.remove('error-pulse'), 800);
+  }
+});
 
-/* ═══════════════════════════════════════════════════════════
-   MAIN ANALYZE FLOW
-═══════════════════════════════════════════════════════════ */
+// Validation and Execution on Click
 analyzeBtn.addEventListener('click', async () => {
+  const textLen = ctxTextarea.value.trim().length;
+  const textError = document.getElementById('text-error');
+  
+  if (textLen < MIN_CHARS || images.length === 0) {
+    if (textLen < MIN_CHARS) {
+       textError.style.display = 'block';
+       document.getElementById('text-input-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (images.length === 0) {
+       const imgError = document.getElementById('img-error-msg');
+       imgError.textContent = "Please upload at least 1 image.";
+       imgError.style.display = 'block';
+       setTimeout(() => imgError.style.display = 'none', 3000);
+    }
+    return;
+  }
+  textError.style.display = 'none';
+
   if (analyzing) return;
   analyzing = true;
-  analyzeBtn.disabled = true;
 
   const loaderTimer = startLoader();
-
   const videoCtx = ctxTextarea.value.trim();
 
   // Run AI + pixel analysis in parallel per image
