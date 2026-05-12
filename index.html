@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ThumbFast — AI Thumbnail Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 /* ═══════════════════════════════════════════════════════════
@@ -356,23 +356,29 @@ body::before {
 .text-input-wrap {
   position: relative;
   border-radius: var(--r-lg);
-  overflow: hidden; /* Important for absolute positioned bar */
+  overflow: hidden; 
+  border: 1.5px solid var(--border-mid);
+  transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease);
+  background: var(--surface);
+}
+
+.text-input-wrap:focus-within {
+  border-color: var(--blue-bright);
+  box-shadow: 0 0 0 3px var(--blue-glow);
 }
 
 .context-textarea {
   width: 100%;
   min-height: 110px;
-  padding: 16px 18px;
-  background: var(--surface);
-  border: 1.5px solid var(--border-mid);
-  border-radius: var(--r-lg);
-  font-family: 'Outfit', sans-serif;
+  padding: 16px 18px 16px;
+  background: transparent;
+  border: none;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: var(--text-1);
-  resize: none; /* Disabled manual resize */
+  resize: none; 
   outline: none;
-  transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease);
   line-height: 1.65;
 }
 
@@ -1512,11 +1518,10 @@ body::before {
   padding: 28px 0;
   margin-top: 80px;
   text-align: center;
-  position: sticky; /* Make it sticky to the bottom if main content is short */
-  bottom: 0;
+  position: relative;
   width: 100%;
-  background: var(--void); /* Ensure background is solid so text is visible over other elements if floating */
-  z-index: 100;
+  background: var(--void);
+  z-index: 1;
 }
 
 .site-footer p {
@@ -1698,11 +1703,11 @@ body::before {
         <div class="field-label-row">
           <label class="field-label" for="ctx-textarea">
             <span class="label-lg">Please enter title and description</span>
-            <span class="label-sm">Context</span><span class="req">*</span>
+            <span class="label-sm">Context</span>
           </label>
           <span class="char-chip" id="char-chip">0 / 200</span>
         </div>
-        <div class="text-input-wrap" id="text-input-wrap" style="padding-bottom: 3px;">
+        <div class="text-input-wrap" id="text-input-wrap">
           <textarea
             id="ctx-textarea"
             class="context-textarea"
@@ -1710,7 +1715,6 @@ body::before {
             maxlength="200"
             rows="4"
             placeholder="text enter wala"
-            style="border: none; background: transparent; width: 100%; outline: none;"
           ></textarea>
           <div class="char-bar">
             <div class="char-bar-fill" id="char-bar-fill"></div>
@@ -1724,7 +1728,7 @@ body::before {
         <div class="upload-section-label">
           <span>
             <span class="label-lg">Thumbnail Images</span>
-            <span class="label-sm">Upload</span><span class="req" style="color:var(--blue-bright);margin-left:3px">*</span>
+            <span class="label-sm">Upload</span>
           </span>
           <span class="image-count-chip" id="img-count-chip">0 / 5 uploaded</span>
         </div>
@@ -1748,13 +1752,7 @@ body::before {
           </div>
         </div>
 
-        <div class="preview-grid" id="preview-grid">
-          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-        </div>
+        <div class="preview-grid" id="preview-grid" style="display: none;"></div>
 
         <div class="image-area-error" id="image-error-msg">Duplicate images not allowed.</div>
 
@@ -1984,11 +1982,17 @@ function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
-/* ───────────────────────────────────────────────
-   RENDER PREVIEWS
-─────────────────────────────────────────────── */
 function renderPreviews() {
   previewGrid.innerHTML = '';
+  
+  if (images.length === 0) {
+    previewGrid.style.display = 'none'; // Hide if no images
+    return;
+  }
+  
+  previewGrid.style.display = 'grid'; // Show grid
+
+  // Render actual images
   images.forEach((img, i) => {
     const card = document.createElement('div');
     card.className = 'preview-card';
@@ -2001,6 +2005,16 @@ function renderPreviews() {
     previewGrid.appendChild(card);
   });
 
+  // Render remaining dotted squares (up to 5)
+  const remaining = MAX_IMGS - images.length;
+  for (let i = 0; i < remaining; i++) {
+    const dotted = document.createElement('div'); 
+    dotted.className = 'preview-dotted';
+    dotted.innerHTML = '<div class="dotted-icon"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>';
+    previewGrid.appendChild(dotted);
+  }
+
+  // Attach event listeners for remove
   previewGrid.querySelectorAll('.remove-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -2394,16 +2408,13 @@ function buildResultsUI() {
       </span>`
     ).join('');
 
-// Removed trophic win banner area per request. 
-    // compBannerWrap is now left empty, results section meta text changed.
+// Comparison banner
+  if (multi) {
     document.getElementById('results-meta').textContent = 'Analysis matrix loaded - Image One Win forced variant check.';
-              Score ${winnerScore} / 100 · ${winner.aiResult?.verdict || ''}
-            </div>
-          </div>
-        </div>
-        <div class="comp-score-row">${scoreChips}</div>
-      </div>
-    `;
+    compBannerWrap.innerHTML = ''; 
+  } else {
+    document.getElementById('results-meta').textContent = 'Analysis matrix loaded.';
+    compBannerWrap.innerHTML = '';
   }
 
   // Result cards
@@ -2561,22 +2572,12 @@ function buildCard(img, res, index, multi) {
 }
 
 function resetApp() {
-  // Clean page internally instead of reload
   images = [];
   ctxTextarea.value = '';
-  ctxTextarea.dispatchEvent(new Event('input')); // Trigger visual update
-  uploadedHashes = []; // Reset hash history
+  ctxTextarea.dispatchEvent(new Event('input')); 
+  uploadedHashes = []; 
   
-  // Remove pre-rendered dotted placeholders (if any) and existing previews
-  while (previewGrid.firstChild) {
-      previewGrid.removeChild(previewGrid.firstChild);
-  }
-  // Re-append dotted blanks
-  for (let i = 0; i < MAX_IMGS; i++) {
-    const dotted = document.createElement('div'); dotted.className = 'preview-dotted';
-    dotted.innerHTML = '<div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>';
-    previewGrid.appendChild(dotted);
-  }
+  renderPreviews(); // This will automatically clear the grid and hide it completely
   updateImgChip();
   resultsSection.classList.remove('active');
   compBannerWrap.innerHTML = '';
