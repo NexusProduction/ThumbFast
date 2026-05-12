@@ -42,7 +42,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text-1);
   min-height: 100vh;
@@ -51,12 +51,11 @@ body {
   overflow-x: hidden;
 }
 
-/* ── HEADER ── */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 200;
-  height: 52px;
+  height: 64px; /* Increased height */
   background: rgba(0,0,0,0.85);
   border-bottom: 1px solid var(--border-1);
   backdrop-filter: blur(24px) saturate(180%);
@@ -81,18 +80,18 @@ body {
 }
 
 .wordmark-icon {
-  width: 26px; height: 26px;
+  width: 32px; height: 32px; /* Increased size */
   background: var(--accent);
-  border-radius: 7px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.wordmark-icon svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.wordmark-icon svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
 .wordmark-text {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 20px; /* Increased text size */
+  font-weight: 700;
   color: var(--text-1);
   letter-spacing: -0.03em;
 }
@@ -183,7 +182,7 @@ body {
   padding: 16px 18px;
   background: transparent;
   border: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 400;
   color: var(--text-1);
@@ -339,7 +338,7 @@ body {
   border: none;
   border-radius: var(--radius-md);
   padding: 13px 28px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -365,7 +364,7 @@ body {
   border: 1px solid var(--border-2);
   border-radius: var(--radius-md);
   padding: 11px 22px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -496,7 +495,7 @@ body {
 }
 
 .results-title { font-size: 22px; font-weight: 600; color: var(--text-1); letter-spacing: -0.04em; }
-.results-count { font-size: 13px; color: var(--text-3); margin-top: 3px; font-weight: 400; }
+.results-count { font-size: 16px; color: var(--text-2); margin-top: 4px; font-weight: 500; }
 
 /* ── RESULT CARD ── */
 .result-card {
@@ -600,12 +599,13 @@ body {
 }
 
 .section-eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  color: var(--text-3);
+  font-family: 'JetBrains Mono', 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-2);
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .metrics-grid {
@@ -624,7 +624,7 @@ body {
 .metric-tile:hover { border-color: var(--border-2); transform: translateY(-1px); }
 
 .metric-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-.metric-name { font-size: 13px; font-weight: 500; color: var(--text-1); }
+.metric-name { font-size: 14px; font-weight: 600; color: #ffffff; }
 .metric-val  { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: var(--text-1); line-height: 1; }
 
 .metric-bar { height: 2px; background: var(--surface-4); border-radius: 2px; overflow: hidden; }
@@ -634,7 +634,7 @@ body {
 .bar-average   { background: var(--amber); }
 .bar-poor      { background: var(--red); }
 
-.metric-status { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-3); margin-top: 7px; letter-spacing: 0.04em; }
+.metric-status { font-family: 'JetBrains Mono', 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-2); margin-top: 8px; letter-spacing: 0.04em; }
 .metric-status.s-excellent { color: var(--green); }
 .metric-status.s-good      { color: var(--accent); }
 .metric-status.s-average   { color: var(--amber); }
@@ -1226,7 +1226,7 @@ function buildResultsUI() {
 
   const count = images.length;
   document.getElementById('results-meta').textContent =
-    count === 1 ? '1 thumbnail analyzed' : `${count} thumbnails analyzed · ranked by score`;
+    count === 1 ? '1 Thumbnail Analyzed' : `${count} Thumbnails Analyzed · Ranked by Score`;
 
   images.forEach((img, index) => {
     cardsWrap.appendChild(buildCard(img, img.aiResult, index, count > 1));
@@ -1283,11 +1283,6 @@ function buildCard(img, res, index, multi) {
     </div>`;
   }).join('');
 
-  const recs = res?.recommendations || [{ priority:'MED', action:'No specific recommendations.' }];
-  const recsHtml = recs.map(rec =>
-    `<li class="rec-item"><span class="rec-tag tag-${rec.priority}">${rec.priority}</span><span>${escHtml(rec.action)}</span></li>`
-  ).join('');
-
   const reaction = res?.audienceReaction || '';
 
   card.innerHTML = `
@@ -1303,17 +1298,8 @@ function buildCard(img, res, index, multi) {
         ${reaction ? `<div class="audience-reaction">${escHtml(reaction)}</div>` : ''}
       </div>
       <div class="card-right">
-        <div>
-          <div class="section-eyebrow">Dimension Scores</div>
-          <div class="metrics-grid">${metricsHtml}</div>
-        </div>
-        <div class="recs-block">
-          <div class="recs-head">
-            <div class="recs-title">AI Recommendations</div>
-            <div class="recs-sub">Actionable improvements</div>
-          </div>
-          <ul class="rec-list">${recsHtml}</ul>
-        </div>
+        <div class="section-eyebrow">Dimension Scores</div>
+        <div class="metrics-grid">${metricsHtml}</div>
       </div>
     </div>`;
 
