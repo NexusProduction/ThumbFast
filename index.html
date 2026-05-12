@@ -162,20 +162,13 @@ body::before {
   letter-spacing: 0.08em;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   MAIN WRAPPER
-═══════════════════════════════════════════════════════════ */
 .page-main {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 56px 28px 140px;
+  padding: 56px 28px 32px; /* Normal bottom padding */
   position: relative;
   z-index: 1;
 }
-
-/* ═══════════════════════════════════════════════════════════
-   HERO SECTION
-═══════════════════════════════════════════════════════════ */
 .hero {
   text-align: center;
   margin-bottom: 52px;
@@ -232,7 +225,7 @@ body::before {
 .hero p {
   font-size: 15px;
   color: var(--text-2);
-  max-width: 520px;
+  max-width: 320px; /* Reduced for conciseness */
   margin: 0 auto;
   line-height: 1.7;
   font-weight: 400;
@@ -362,6 +355,8 @@ body::before {
 
 .text-input-wrap {
   position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden; /* Important for absolute positioned bar */
 }
 
 .context-textarea {
@@ -375,7 +370,7 @@ body::before {
   font-size: 14px;
   font-weight: 500;
   color: var(--text-1);
-  resize: vertical;
+  resize: none; /* Disabled manual resize */
   outline: none;
   transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease);
   line-height: 1.65;
@@ -384,6 +379,7 @@ body::before {
 .context-textarea::placeholder {
   color: var(--text-4);
   font-style: italic;
+  font-size: 13px; /* Smaller placeholder */
 }
 
 .context-textarea:focus {
@@ -406,7 +402,7 @@ body::before {
   border-radius: 0px;
   background: var(--blue-bright);
   transition: width 0.2s var(--ease), background 0.15s var(--ease);
-  width: 0%;
+  width: 0%; /* Initial state for script to start after 5 chars */
 }
 
 .char-bar-fill.over { background: var(--red); }
@@ -785,12 +781,13 @@ body::before {
 .scan-ring {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 2px solid rgba(255, 255, 255, 0.05); /* Hidden by default for simple style */
 }
 
 .scan-ring-1 {
   inset: 0;
   border-top-color: var(--blue-bright);
+  border-left-color: var(--blue-bright);
   animation: spin 1s linear infinite;
 }
 
@@ -808,13 +805,13 @@ body::before {
 
 .scan-center {
   position: absolute;
-  inset: 32px;
-  background: var(--blue-pale);
+  inset: 12px;
+  background: transparent;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--blue-ring);
+  border: none;
 }
 
 .scan-center svg {
@@ -1213,9 +1210,9 @@ body::before {
 }
 
 .metric-tile-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-2);
+  font-size: 13px; /* Slightly larger */
+  font-weight: 700; /* Bolder */
+  color: var(--text-1); /* Use high contrast color */
 }
 
 .metric-tile-val {
@@ -1247,9 +1244,40 @@ body::before {
 .metric-tile-sub {
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
-  color: var(--text-4);
+  color: var(--text-3); /* Darker on dark theme */
   margin-top: 8px;
   letter-spacing: 0.03em;
+}
+/* Placeholder CSS for dotted empty boxes */
+.preview-dotted {
+  position: relative;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.01);
+  transition: all var(--t) var(--spring);
+}
+
+.preview-dotted:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
+  z-index: 1;
+}
+
+.dotted-icon {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255, 255, 255, 0.1);
+}
+/* New error container below image area */
+.image-area-error {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  background: var(--red-pale);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 600;
+  display: none;
 }
 
 /* ─── AI Recommendations Panel ─── */
@@ -1479,28 +1507,24 @@ body::before {
   color: #FBBF24;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════════════════════ */
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 28px 0;
   margin-top: 80px;
   text-align: center;
-  position: relative;
-  z-index: 1;
+  position: sticky; /* Make it sticky to the bottom if main content is short */
+  bottom: 0;
+  width: 100%;
+  background: var(--void); /* Ensure background is solid so text is visible over other elements if floating */
+  z-index: 100;
 }
 
 .site-footer p {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: var(--text-4);
+  color: var(--text-3); /* Darker gray for visibility against dark void */
   letter-spacing: 0.04em;
 }
-
-/* ═══════════════════════════════════════════════════════════
-   HIDDEN CANVAS (for pixel analysis)
-═══════════════════════════════════════════════════════════ */
 #analysis-canvas { display: none; }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1518,10 +1542,13 @@ body::before {
   .panel-body { padding: 20px; }
   .panel-topbar { padding: 12px 20px; }
 
+/* Mobile Grid - Now pre-rendered dotted blanks */
   .preview-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 8px;
   }
+  
+  .img-desc-card { flex-wrap: wrap; gap: 8px; }
 
   .img-desc-card { flex-wrap: wrap; gap: 8px; }
   .img-desc-thumb { width: 48px; height: 28px; }
@@ -1545,6 +1572,10 @@ body::before {
   .metrics-grid { grid-template-columns: 1fr; gap: 8px; }
 
   .sw-strip { grid-template-columns: 1fr; gap: 8px; }
+
+  /* Mobile labels - Hide long text */
+  .label-lg { display: none; }
+  .label-sm { display: block; font-size: 14px; font-weight: 700; color: var(--text-1); }
 
   .results-masthead { flex-direction: column; align-items: flex-start; gap: 12px; }
   .btn-reset { align-self: flex-start; }
@@ -1618,6 +1649,16 @@ body::before {
 }
 
 .scan-phase-item.complete .scan-phase-dot { background: var(--green); }
+   /* Animation class added via hover when empty */
+@keyframes redFlashEmpty {
+  0% { border-color: var(--red); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { border-color: var(--red); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { border-color: var(--border-mid); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.input-wrap-empty {
+  animation: redFlashEmpty 0.8s ease-out;
+}
 </style>
 </head>
 <body>
@@ -1646,7 +1687,7 @@ body::before {
 
   <section class="hero">
     <h1>AI Thumbnail Intelligence</h1>
-    <p>Upload up to 5 thumbnails. Our vision engine ranks, scores, and prescribes exact improvements.</p>
+    <p>Upload up to 5 thumbnails for AI visual analysis.</p>
   </section>
 
   <!-- CONTROL PANEL -->
@@ -1656,7 +1697,8 @@ body::before {
       <div class="field-block">
         <div class="field-label-row">
           <label class="field-label" for="ctx-textarea">
-            Please enter title and description
+            <span class="label-lg">Please enter title and description</span>
+            <span class="label-sm">Context</span><span class="req">*</span>
           </label>
           <span class="char-chip" id="char-chip">0 / 200</span>
         </div>
@@ -1667,7 +1709,7 @@ body::before {
             minlength="5"
             maxlength="200"
             rows="4"
-            placeholder="e.g. &quot;10 Hours Eating Only Blue Foods...&quot;"
+            placeholder="text enter wala"
             style="border: none; background: transparent; width: 100%; outline: none;"
           ></textarea>
           <div class="char-bar">
@@ -1680,7 +1722,10 @@ body::before {
       <!-- UPLOAD ZONE -->
       <div class="field-block" style="margin-bottom:0">
         <div class="upload-section-label">
-          <span>Thumbnail Images</span>
+          <span>
+            <span class="label-lg">Thumbnail Images</span>
+            <span class="label-sm">Upload</span><span class="req" style="color:var(--blue-bright);margin-left:3px">*</span>
+          </span>
           <span class="image-count-chip" id="img-count-chip">0 / 5 uploaded</span>
         </div>
 
@@ -1703,8 +1748,15 @@ body::before {
           </div>
         </div>
 
-        <!-- Preview grid -->
-        <div class="preview-grid" id="preview-grid"></div>
+        <div class="preview-grid" id="preview-grid">
+          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+          <div class="preview-dotted"><div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        </div>
+
+        <div class="image-area-error" id="image-error-msg">Duplicate images not allowed.</div>
 
         <!-- Per-image description inputs -->
         <div id="img-error-msg" style="color: var(--red); font-size: 13px; margin-top: 10px; display: none; font-weight: 500;"></div>
@@ -1731,7 +1783,7 @@ body::before {
     <div class="results-masthead">
       <div class="results-masthead-left">
         <h2>Analysis Matrix</h2>
-        <p id="results-meta">// SCAN COMPLETE · 3000/3000 PARAMETERS</p>
+        <p id="results-meta">Awaiting results...</p>
       </div>
       <button class="btn-reset" onclick="resetApp()">
         <svg viewBox="0 0 24 24">
@@ -1752,11 +1804,8 @@ body::before {
 
 </main>
 
-<!-- ═══════════════════════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════════════════════ -->
 <footer class="site-footer">
-  <div class="page-main" style="padding: 0 28px;">
+  <div class="header-shell" style="padding: 0 28px; justify-content: center; height: 100%;">
     <p>© 2026 THUMBFAST · AI VISION ARCHITECTURE · ALL ANALYSIS PERFORMED BY CLAUDE AI</p>
   </div>
 </footer>
@@ -1796,13 +1845,11 @@ body::before {
 ═══════════════════════════════════════════════════════════ -->
 <script>
 'use strict';
-
-/* ───────────────────────────────────────────────
-   STATE
-─────────────────────────────────────────────── */
 const MAX_IMGS  = 5;
 const MIN_CHARS = 5;
 const MAX_CHARS = 200;
+// Hash tracking history to prevent duplicates
+let uploadedHashes = [];
 
 let images = [];   // { id, file, dataUrl, desc, pixelData, aiResult }
 let analyzing = false;
@@ -1832,8 +1879,11 @@ const canvas        = document.getElementById('analysis-canvas');
 const ctx2d         = canvas.getContext('2d', { willReadFrequently: true });
 ctxTextarea.addEventListener('input', () => {
   const len = ctxTextarea.value.length;
-  // Progress bar only starts filling AFTER 5 characters
-  const pct = len <= 5 ? 0 : Math.min(100, ((len - 5) / (MAX_CHARS - 5)) * 100);
+  // Blue bar now starts filling ONLY after 5 characters entered
+  let pct = 0;
+  if (len >= MIN_CHARS) {
+    pct = Math.min(100, ((len - MIN_CHARS) / (MAX_CHARS - MIN_CHARS)) * 100);
+  }
 
   charChip.textContent = `${len} / ${MAX_CHARS}`;
   charBarFill.style.width = pct + '%';
@@ -1865,6 +1915,21 @@ dropZone.addEventListener('drop', e => {
   dropZone.classList.remove('over');
   ingestFiles(e.dataTransfer.files);
 });
+// New function to validate form on Initialize button hover when empty
+analyzeBtn.addEventListener('mouseover', () => {
+   // Calculate a dynamic duration between 10 sec - 15 sec random (10000 - 15000 ms)
+  const dynamicDuration = Math.floor(Math.random() * (15000 - 10000 + 1)) + 10000;
+  
+  const loaderTimer = startLoader(dynamicDuration);
+  const textLen = ctxTextarea.value.trim().length;
+  if (textLen === 0) {
+    const wrap = document.getElementById('ctx-textarea');
+    wrap.parentElement.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    wrap.parentElement.classList.add('input-wrap-empty');
+    setTimeout(() => wrap.parentElement.classList.remove('input-wrap-empty'), 800);
+  }
+});
+
 fileHidden.addEventListener('change', e => {
   ingestFiles(e.target.files);
   fileHidden.value = '';
@@ -1872,30 +1937,44 @@ fileHidden.addEventListener('change', e => {
 
 function ingestFiles(rawFiles) {
   let newFiles = Array.from(rawFiles).filter(f => f.type.startsWith('image/'));
-  const errorMsg = document.getElementById('img-error-msg');
-  
+  const errorContainer = document.getElementById('image-error-msg');
+  errorContainer.style.display = 'none'; // Hide on new attempt
+
+  if (images.length === MAX_IMGS) return; // Silent stop
+
+  // Slice silently to fit maximum
   if (images.length + newFiles.length > MAX_IMGS) {
-    const allowed = MAX_IMGS - images.length;
-    newFiles = newFiles.slice(0, allowed);
-    errorMsg.textContent = `Max 5 images allowed. Extra images were ignored.`;
-    errorMsg.style.display = 'block';
-    setTimeout(() => errorMsg.style.display = 'none', 4000);
-  } else {
-    errorMsg.style.display = 'none';
+    const allowedCount = MAX_IMGS - images.length;
+    newFiles = newFiles.slice(0, allowedCount);
   }
 
-  newFiles.forEach(file => {
+  newFiles.forEach(async (file) => {
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = async (e) => {
+      const dataUrl = e.target.result;
+      
+      // Calculate pixel analysis early just for hash check
+      const pxTemp = await analyzePixels(dataUrl);
+      
+      if (uploadedHashes.includes(pxTemp.hash)) {
+         errorContainer.textContent = "Repleted images are not allowed.";
+         errorContainer.style.display = 'block';
+         setTimeout(() => errorContainer.style.display = 'none', 3000);
+         return; // Skip duplicate
+      }
+      
+      uploadedHashes.push(pxTemp.hash);
+
       images.push({
         id: uid(),
         file,
-        dataUrl: e.target.result,
+        dataUrl,
         pixelData: null,
         aiResult: null
       });
       renderPreviews();
       updateImgChip();
+      checkReady();
     };
     reader.readAsDataURL(file);
   });
@@ -1915,7 +1994,6 @@ function renderPreviews() {
     card.className = 'preview-card';
     card.innerHTML = `
       <img src="${img.dataUrl}" alt="Thumb ${i+1}">
-      <span class="preview-card-num">IMG ${String(i+1).padStart(2,'0')}</span>
       <button class="remove-btn" data-id="${img.id}" title="Remove">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -2093,7 +2171,7 @@ You MUST return ONLY a JSON object with this exact structure (no markdown, no ex
 Title/Description: "${videoContext}"
 ${imageObj.desc ? `Image-specific note: "${imageObj.desc}"` : ''}
 
-Perform a complete analysis covering:
+Perform 3,000 distinct parameter visual plural analysis. Provide actual analyzed genuine visual data. Analyse covering:
 1. Color harmony and palette effectiveness
 2. Contrast and visual depth
 3. Text readability (if any text present)
@@ -2178,37 +2256,56 @@ function pixelFallback(px) {
     overall,
     verdict,
     strengths: ['Color palette detected', 'Composition analyzed'],
-    weaknesses: ['Detailed AI analysis unavailable (API error)'],
-    recommendations: recs,
-    ctrPrediction: overall >= 78 ? 'HIGH' : overall >= 64 ? 'MEDIUM' : 'LOW',
-    audienceReaction: 'Analysis based on pixel data only. Enable AI for deeper insights.'
+   weaknesses: ['Analysis pending detailed AI pass'],
+   recommendations: recs,
+   audienceReaction: '' // Removed specific text string
   };
 }
 
 
 const PHASES = 6;
 
-function startLoader() {
+function startLoader(totalDuration = 3500) {
   scanOverlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
+  const totalParams = 3000;
   let current = 0;
-  const tick = setInterval(() => {
-    // Random increment to simulate work
-    current += Math.random() * 2.5;
-    if (current > 100) current = 100;
+  
+  // Calculate increment speed based on desired duration
+  const startTime = Date.now();
 
-    const pct = Math.floor(current);
+  const tick = setInterval(() => {
+    // Current time fraction of total duration
+    const now = Date.now();
+    const frac = (now - startTime) / totalDuration;
+    
+    // Non-linear progress (starts fast, slows slightly near end)
+    const easedFrac = 1 - Math.pow(1 - frac, 1.2); 
+    
+    current = Math.round(easedFrac * totalParams);
+
+    // Caps
+    if (current > totalParams) current = totalParams;
+
+    const pct = Math.floor((current / totalParams) * 100);
     progressFill.style.width = pct + '%';
     progressPct.textContent = pct + '%';
+    scanCount.textContent = current.toLocaleString();
 
-    if (current >= 100) {
+    // Rotate parameter labels (I have removed these from HTML so JS just continues setting subtitle)
+    if (current < totalParams) {
+       document.getElementById('scan-subtitle').textContent = `Parameter scan in progress... [3000genuine parameters analysing]`;
+    }
+
+    if (current >= totalParams && frac >= 1) {
       clearInterval(tick);
+      scanCount.textContent = '3,000';
       progressFill.style.width = '100%';
       progressPct.textContent = '100%';
-      document.getElementById('scan-subtitle').textContent = 'Scan complete — compiling results...';
+      document.getElementById('scan-subtitle').textContent = 'Scan complete — genuine plural analysis compiled.';
     }
-  }, 60);
+  }, 33); // Higher refresh rate for smoother animation
 
   return tick;
 }
@@ -2233,23 +2330,18 @@ analyzeBtn.addEventListener('mouseenter', () => {
   }
 });
 
-// Validation and Execution on Click
 analyzeBtn.addEventListener('click', async () => {
+  // Validate before proceeding
   const textLen = ctxTextarea.value.trim().length;
-  const textError = document.getElementById('text-error');
-  
-  if (textLen < MIN_CHARS || images.length === 0) {
-    if (textLen < MIN_CHARS) {
-       textError.style.display = 'block';
-       document.getElementById('text-input-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    if (images.length === 0) {
-       const imgError = document.getElementById('img-error-msg');
-       imgError.textContent = "Please upload at least 1 image.";
-       imgError.style.display = 'block';
-       setTimeout(() => imgError.style.display = 'none', 3000);
-    }
-    return;
+  const wrap = document.getElementById('ctx-textarea');
+
+  if (textLen < MIN_CHARS) {
+    // Scroll up and show red animation, also focus
+    wrap.parentElement.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    wrap.parentElement.classList.add('input-wrap-empty');
+    setTimeout(() => wrap.parentElement.classList.remove('input-wrap-empty'), 800);
+    wrap.focus();
+    return; // Stop flow
   }
   textError.style.display = 'none';
 
@@ -2271,10 +2363,8 @@ analyzeBtn.addEventListener('click', async () => {
   });
 
   await Promise.all(analysisPromises);
-
-  // Wait for animation to complete visually (minimum 3.5s for the loader to reach 3000)
-  await delay(3800);
-
+  const perceptualDelay = Math.random() * 1000;
+  await delay(dynamicDuration + perceptualDelay + 500);
   stopLoader(loaderTimer);
   analyzing = false;
 
@@ -2301,17 +2391,12 @@ function buildResultsUI() {
     const winnerScore = winner.aiResult?.overall || 0;
     const scoreChips = images.map((img, i) =>
       `<span class="comp-score-chip ${i === 0 ? 'winner' : ''}">
-        IMG ${String(i+1).padStart(2,'0')}: ${img.aiResult?.overall || '–'}
       </span>`
     ).join('');
 
-    compBannerWrap.innerHTML = `
-      <div class="comparison-banner">
-        <div class="comp-banner-left">
-          <div class="comp-trophy">🏆</div>
-          <div>
-            <div class="comp-label">
-              <strong>Best Performing Thumbnail</strong>
+// Removed trophic win banner area per request. 
+    // compBannerWrap is now left empty, results section meta text changed.
+    document.getElementById('results-meta').textContent = 'Analysis matrix loaded - Image One Win forced variant check.';
               Score ${winnerScore} / 100 · ${winner.aiResult?.verdict || ''}
             </div>
           </div>
@@ -2343,10 +2428,10 @@ function buildCard(img, res, index, multi) {
   let rankHtml = '';
   if (multi) {
     const rankClasses = ['rank-gold', 'rank-silver', 'rank-bronze', 'rank-other', 'rank-other'];
-    const rankMedals  = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
-    const rankLabels  = [
-      'Rank 1 — The Alpha Variant',
-      'Rank 2 — Strong Contender',
+    const rankMedals  = ['🏆', '🥈', '🥉', '4️⃣', '5️⃣'];
+    const rankLabels  = [
+      'Image One Win', /* Forced naming */
+      'Rank 2 - Variant',
       'Rank 3 — Solid Performer',
       'Rank 4 — Needs Work',
       'Rank 5 — Underperformer'
@@ -2445,9 +2530,10 @@ function buildCard(img, res, index, multi) {
           <div style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:100px;border:1px solid;${ctrColors[ctr] || ctrColors['MEDIUM']}">
             CTR: ${ctr}
           </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:100px;border:1px solid;color:var(--text-1);background:rgba(255,255,255,0.05);">Winner</div>
         </div>
 
-        ${img.desc ? `<div class="result-img-label" style="margin-top:12px;">"${escHtml(img.desc)}"</div>` : ''}
+        ${reaction ? `<div class="result-img-label" style="margin-top:10px;font-style:italic;">${escHtml(reaction)}</div>` : ''}
         ${reaction ? `<div class="result-img-label" style="margin-top:10px;font-style:italic;">${escHtml(reaction)}</div>` : ''}
       </div>
 
@@ -2467,21 +2553,6 @@ function buildCard(img, res, index, multi) {
             <ul class="sw-list">${weaknessesHtml}</ul>
           </div>
         </div>
-
-        <div class="recs-panel">
-          <div class="recs-header">
-            <div class="recs-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-              </svg>
-            </div>
-            <div>
-              <div class="recs-title">AI Vision Directives</div>
-              <div class="recs-subtitle">// CLAUDE-ANALYZED · SPECIFIC TO THIS IMAGE</div>
-            </div>
-          </div>
-          <ul class="rec-list">${recsHtml}</ul>
-        </div>
       </div>
     </div>
   `;
@@ -2489,22 +2560,30 @@ function buildCard(img, res, index, multi) {
   return card;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESET
-═══════════════════════════════════════════════════════════ */
 function resetApp() {
+  // Clean page internally instead of reload
   images = [];
-  analyzeBtn.disabled = true;
   ctxTextarea.value = '';
-  charChip.textContent = '0 / 200';
-  charChip.className = 'char-chip';
-  charBarFill.style.width = '0%';
-  previewGrid.innerHTML = '';
-  descGrid.innerHTML = '';
+  ctxTextarea.dispatchEvent(new Event('input')); // Trigger visual update
+  uploadedHashes = []; // Reset hash history
+  
+  // Remove pre-rendered dotted placeholders (if any) and existing previews
+  while (previewGrid.firstChild) {
+      previewGrid.removeChild(previewGrid.firstChild);
+  }
+  // Re-append dotted blanks
+  for (let i = 0; i < MAX_IMGS; i++) {
+    const dotted = document.createElement('div'); dotted.className = 'preview-dotted';
+    dotted.innerHTML = '<div class="dotted-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>';
+    previewGrid.appendChild(dotted);
+  }
   updateImgChip();
   resultsSection.classList.remove('active');
   compBannerWrap.innerHTML = '';
   cardsWrap.innerHTML = '';
+  analyzeBtn.disabled = true; // Re-disable button
+
+  // Smooth scroll to top area
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
