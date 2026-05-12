@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,53 +8,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
-/* ─── DESIGN TOKENS ─── */
+/* ─── DESIGN TOKENS (INFINITE VOID) ─── */
 :root {
-  /* Palette */
-  --bg:            #FFFFFF;
-  --surface:       #F9FAFB;
-  --surface-2:     #F3F4F6;
-  --border:        #E5E7EB;
-  --border-dark:   #D1D5DB;
-  --blue:          #0066FF;
-  --blue-hover:    #0052CC;
-  --blue-tint:     #F0F7FF;
-  --blue-glow:     rgba(0,102,255,0.12);
-  --green:         #10B981;
-  --green-tint:    #ECFDF5;
-  --red:           #EF4444;
-  --red-tint:      #FEF2F2;
-  --text-primary:  #111827;
-  --text-secondary:#6B7280;
-  --text-tertiary: #9CA3AF;
-  --shadow-sm:     0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:     0 4px 20px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
-  --shadow-lg:     0 8px 32px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
-  --radius-outer:  16px;
-  --radius-inner:  8px;
-  --radius-sm:     6px;
-}
+  --bg: #020205; /* Deep Navy Base */
+  --surface: #0F172A; /* Primary Cards */
+  --border: rgba(30, 41, 59, 0.15); /* 15% opacity of #1E293B */
+  --border-solid: #1E293B; /* Solid border for cards */
+  --blue: #0066FF;
+  --blue-glow: rgba(0, 102, 255, 0.05); /* 5% glow */
+  --blue-glow-hover: rgba(0, 102, 255, 0.15);
+  
+  /* Semantic OKLCH Colors for equal perceived brightness */
+  --chart-success: oklch(0.65 0.15 150);
+  --chart-info: oklch(0.65 0.15 250);
 
-[data-theme="dark"] {
-  --bg:            #020617;
-  --surface:       #0F172A;
-  --surface-2:     #1E293B;
-  --border:        rgba(255,255,255,0.08);
-  --border-dark:   rgba(255,255,255,0.14);
-  --blue-tint:     rgba(0,102,255,0.12);
-  --green-tint:    rgba(16,185,129,0.12);
-  --red-tint:      rgba(239,68,68,0.12);
-  --text-primary:  #F1F5F9;
-  --text-secondary:#94A3B8;
-  --text-tertiary: #64748B;
-  --shadow-sm:     0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md:     0 4px 20px rgba(0,0,0,0.4);
-  --shadow-lg:     0 8px 32px rgba(0,0,0,0.5);
+  /* Typography */
+  --text-primary: #F8FAFC; /* 95% white */
+  --text-secondary: #94A3B8; /* 60% white */
+  
+  /* Radii (16px outer, 8px inner rule) */
+  --radius-outer: 16px;
+  --radius-inner: 8px;
 }
 
 /* ─── RESET & BASE ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -64,10 +42,15 @@ body {
   min-height: 100vh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  transition: background 0.3s, color 0.3s;
 }
 
-/* ─── HEADER ─── */
+h1, h2, h3, h4 {
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+/* ─── ULTRA-MINIMAL HEADER ─── */
 .header {
   position: sticky;
   top: 0;
@@ -76,508 +59,334 @@ body {
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  height: 64px;
 }
 
 .header-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
-  height: 64px;
+  padding: 0 32px;
+  height: 100%;
   display: flex;
   align-items: center;
-  gap: 32px;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   text-decoration: none;
-  flex-shrink: 0;
 }
 
 .logo-icon {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #0066FF 0%, #338FFF 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,102,255,0.3);
+  width: 24px;
+  height: 24px;
+  color: var(--blue);
 }
-
-.logo-icon svg { color: white; width: 18px; height: 18px; }
 
 .logo-text {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--blue);
-  letter-spacing: -0.03em;
-}
-
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 0 auto;
-}
-
-.nav-link {
-  padding: 8px 16px;
-  border-radius: var(--radius-inner);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color 0.15s, background 0.15s;
-  cursor: pointer;
-}
-
-.nav-link:hover { color: var(--text-primary); background: var(--surface); }
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.theme-toggle {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.15s;
-}
-
-.theme-toggle:hover { border-color: var(--border-dark); color: var(--text-primary); }
-.theme-toggle svg { width: 16px; height: 16px; }
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0066FF, #338FFF);
-  border: 1px solid rgba(0,102,255,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
-  letter-spacing: 0;
-  flex-shrink: 0;
+  color: var(--text-primary);
 }
 
 /* ─── MAIN LAYOUT ─── */
 .main {
-  max-width: 1200px;
+  max-width: 1024px; /* Narrower for focus */
   margin: 0 auto;
-  padding: 48px 24px 80px;
+  padding: 64px 32px 120px;
 }
 
-/* ─── HERO SECTION ─── */
-.hero {
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: var(--blue-tint);
-  border: 1px solid rgba(0,102,255,0.2);
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--blue);
-  margin-bottom: 20px;
-  letter-spacing: 0.02em;
-}
-
-.hero-badge svg { width: 12px; height: 12px; }
+/* ─── CONTROL PANEL HERO ─── */
+.hero { margin-bottom: 32px; }
 
 .hero h1 {
-  font-size: clamp(32px, 5vw, 52px);
+  font-size: 32px;
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
-
-.hero h1 span { color: var(--blue); }
 
 .hero p {
-  font-size: 17px;
+  font-size: 16px;
   color: var(--text-secondary);
-  max-width: 480px;
-  margin: 0 auto;
-  line-height: 1.6;
 }
 
-/* ─── UPLOAD CARD ─── */
-.upload-card {
+.control-panel {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-solid);
   border-radius: var(--radius-outer);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
-.drop-zone {
+/* Video Context Chips */
+.context-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.chip-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chip-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 16px;
   background: var(--bg);
-  border: 2px dashed var(--border);
-  border-radius: 12px;
-  margin: 24px;
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-inner);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chip:hover, .chip.active {
+  border-color: var(--blue);
+  color: var(--text-primary);
+}
+
+.chip.active {
+  background: rgba(0, 102, 255, 0.1);
+}
+
+/* Giant Prompt Box */
+.prompt-box {
+  width: 100%;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-outer);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 80px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.prompt-box:focus { border-color: var(--blue); }
+.prompt-box::placeholder { color: var(--text-secondary); opacity: 0.5; }
+
+/* Soft Glass Upload Area */
+.upload-area {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05); /* 5% white overlay */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-outer);
   padding: 48px 24px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
-  position: relative;
-  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
 }
 
-.drop-zone::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--blue-tint);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.drop-zone:hover::before,
-.drop-zone.dragover::before { opacity: 1; }
-
-.drop-zone:hover,
-.drop-zone.dragover {
+.upload-area:hover, .upload-area.dragover {
   border-color: var(--blue);
-  border-width: 2px;
-  border-style: solid;
-  transform: scale(1.005);
+  background: rgba(0, 102, 255, 0.05);
 }
-
-.drop-zone.dragover { transform: scale(1.02); }
-
-.dz-inner { position: relative; z-index: 1; }
 
 .dz-icon {
-  width: 56px;
-  height: 56px;
-  background: var(--blue-tint);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 48px;
+  height: 48px;
   margin: 0 auto 16px;
   color: var(--blue);
-  transition: transform 0.2s;
 }
 
-.drop-zone:hover .dz-icon { transform: translateY(-2px); }
-.dz-icon svg { width: 28px; height: 28px; }
-
-.dz-title {
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-  letter-spacing: -0.01em;
-}
-
-.dz-sub {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-.dz-sub span {
-  color: var(--blue);
-  font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.dz-limit {
-  margin-top: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: var(--text-tertiary);
-  font-weight: 500;
-}
-
-.dz-limit svg { width: 12px; height: 12px; }
-
+.dz-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.dz-sub { font-size: 13px; color: var(--text-secondary); }
 #fileInput { display: none; }
 
-/* ─── THUMBNAIL GRID PREVIEW ─── */
-.thumb-preview {
-  margin: 0 24px 24px;
-  display: none;
+/* Advanced Toggle */
+.advanced-toggle {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.thumb-preview-header {
+.adv-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.thumb-preview-header h3 {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.thumb-preview-header h3 svg { color: var(--blue); width: 14px; height: 14px; }
-
-.clear-btn {
+  gap: 8px;
   font-size: 12px;
-  font-weight: 500;
-  color: var(--red);
+  font-weight: 600;
+  color: var(--text-secondary);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  transition: background 0.15s;
+  padding: 0;
 }
 
-.clear-btn:hover { background: var(--red-tint); }
+.adv-btn:hover { color: var(--text-primary); }
+.adv-btn svg { width: 14px; height: 14px; transition: transform 0.2s; }
+.adv-btn.open svg { transform: rotate(180deg); }
 
-.thumbs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
-}
-
-.thumb-item {
-  position: relative;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--bg);
-  transition: all 0.2s;
-  box-shadow: var(--shadow-sm);
-}
-
-.thumb-item:hover { border-color: var(--border-dark); box-shadow: var(--shadow-md); }
-
-.thumb-item img {
-  width: 100%;
-  height: 90px;
-  object-fit: cover;
-  display: block;
-}
-
-.thumb-item-footer {
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.thumb-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  letter-spacing: 0.02em;
-}
-
-.thumb-remove {
-  width: 20px;
-  height: 20px;
-  background: var(--surface-2);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  transition: all 0.15s;
-  flex-shrink: 0;
-}
-
-.thumb-remove:hover { background: var(--red-tint); color: var(--red); }
-.thumb-remove svg { width: 12px; height: 12px; }
-
-/* ─── VIDEO DETAILS (hidden until upload) ─── */
-.video-details-section {
-  margin: 0 24px;
+.adv-content {
   display: none;
-  animation: slideDown 0.25s ease;
+  gap: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-solid);
 }
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.adv-content.show { display: flex; }
+.adv-stat { display: flex; flex-direction: column; gap: 4px; }
+.adv-stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; }
+.adv-stat-val { font-size: 13px; font-weight: 600; color: var(--text-primary); }
 
-.field-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 8px;
+/* Analyze Button */
+.analyze-action {
+  margin-top: 32px;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  letter-spacing: -0.01em;
+  justify-content: flex-end;
 }
 
-.field-label svg { color: var(--text-secondary); width: 14px; height: 14px; }
-
-.details-textarea {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
+.btn-analyze {
+  background: var(--blue);
+  color: #fff;
+  border: none;
   border-radius: var(--radius-inner);
+  padding: 12px 32px;
   font-size: 14px;
-  font-family: inherit;
-  resize: vertical;
-  min-height: 96px;
-  background: var(--bg);
-  color: var(--text-primary);
-  transition: border-color 0.15s, box-shadow 0.15s;
-  line-height: 1.6;
-}
-
-.details-textarea::placeholder { color: var(--text-tertiary); }
-
-.details-textarea:focus {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(0,102,255,0.08);
-}
-
-/* ─── UPLOAD FOOTER ─── */
-.upload-footer {
-  padding: 20px 24px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  background: var(--surface);
-  margin-top: 24px;
-}
-
-.upload-footer-hint {
-  font-size: 13px;
-  color: var(--text-tertiary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.upload-footer-hint svg { width: 14px; height: 14px; color: var(--text-tertiary); }
-
-.analyze-btn {
+  font-weight: 600;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 28px;
-  background: var(--blue);
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  border-radius: var(--radius-inner);
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-  letter-spacing: -0.01em;
-  box-shadow: 0 2px 8px rgba(0,102,255,0.3);
-  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 20px var(--blue-glow);
 }
 
-.analyze-btn svg { width: 16px; height: 16px; }
-
-.analyze-btn:hover:not(:disabled) {
-  background: var(--blue-hover);
-  box-shadow: 0 4px 16px rgba(0,102,255,0.4);
-  transform: translateY(-1px);
+.btn-analyze:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 0 30px var(--blue-glow-hover);
 }
 
-.analyze-btn:active:not(:disabled) { transform: scale(0.98); }
-
-.analyze-btn:disabled {
-  opacity: 0.45;
+.btn-analyze:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
   box-shadow: none;
 }
 
-/* ─── AD STRIP ─── */
-.ad-strip {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-outer);
-  padding: 16px;
-  text-align: center;
-  margin: 32px 0;
-  min-height: 100px;
+/* Preview Grid */
+.thumbs-preview {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.thumb-mini {
+  position: relative;
+  width: 120px;
+  height: 68px;
+  border-radius: var(--radius-inner);
+  overflow: hidden;
+  border: 1px solid var(--border-solid);
+}
+
+.thumb-mini img { width: 100%; height: 100%; object-fit: cover; }
+.thumb-mini .remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
-/* ─── SKELETON LOADERS ─── */
-.skeleton-wrap {
+/* ─── RESULTS DASHBOARD (BENTO GRID) ─── */
+.results-wrapper {
   display: none;
-  margin: 32px 0;
+  margin-top: 64px;
+  animation: fadeIn 0.4s ease;
 }
 
-.skeleton-wrap.active { display: block; }
+.results-wrapper.active { display: block; }
 
-.skeleton-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.sk {
-  background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-inner);
-}
-
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.sk-circle { border-radius: 50%; }
-.sk-text { height: 16px; }
-.sk-text-sm { height: 12px; }
-
-.sk-bento {
+.bento-grid {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 320px 1fr;
   gap: 24px;
-  margin-bottom: 24px;
 }
 
-.sk-card {
+/* Overall Score Card */
+.score-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-outer);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 0 80px var(--blue-glow); /* Deep Blue Glow */
+}
+
+.score-image {
+  width: 100%;
+  border-radius: var(--radius-inner);
+  margin-bottom: 24px;
+  border: 1px solid var(--border-solid);
+}
+
+.score-circle {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.score-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border-solid);
   border-radius: var(--radius-outer);
   padding: 24px;
   display: flex;
@@ -585,1275 +394,492 @@ body {
   gap: 12px;
 }
 
-.sk-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.sk-image { height: 160px; border-radius: 10px; }
-
-/* ─── RESULTS SECTION ─── */
-.results-wrap {
-  display: none;
-  margin: 32px 0;
-  animation: fadeUp 0.4s ease;
-}
-
-.results-wrap.active { display: block; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.results-header {
+.metric-header {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.results-title {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-}
-
-.results-sub {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.retry-btn {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 18px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-inner);
+}
+
+.metric-title {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
-}
-
-.retry-btn:hover { border-color: var(--border-dark); background: var(--surface-2); }
-.retry-btn svg { width: 14px; height: 14px; }
-
-/* ─── COMPARISON GRID ─── */
-.comparison-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
-  margin-bottom: 32px;
-}
-
-/* ─── RESULT CARD ─── */
-.result-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-outer);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s;
-  position: relative;
-}
-
-.result-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-
-.result-card.winner {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 1px var(--blue), var(--shadow-md), 0 0 40px var(--blue-glow);
-}
-
-.card-badges {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px 0;
-}
-
-.rank-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-secondary);
-  letter-spacing: 0.02em;
 }
 
-.winner-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: var(--blue);
-  border-radius: 100px;
-  font-size: 11px;
+.metric-score {
+  font-size: 20px;
   font-weight: 700;
-  color: white;
-  letter-spacing: 0.02em;
 }
 
-.winner-badge svg { width: 11px; height: 11px; }
-
-.result-image-wrap { padding: 14px 16px; }
-
-.result-image {
-  width: 100%;
-  height: 175px;
-  object-fit: cover;
-  border-radius: 10px;
-  display: block;
-}
-
-/* ─── SCORE RING ─── */
-.score-block {
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-}
-
-.score-ring-wrap { flex-shrink: 0; position: relative; width: 72px; height: 72px; }
-
-.score-ring-svg { width: 72px; height: 72px; transform: rotate(-90deg); }
-
-.ring-track { fill: none; stroke: var(--border); stroke-width: 6; }
-
-.ring-fill {
-  fill: none;
-  stroke: var(--blue);
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-dasharray: 188;
-  stroke-dashoffset: 188;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);
-}
-
-.ring-fill.animated { stroke-dashoffset: var(--offset); }
-
-.score-ring-num {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 19px;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.score-info { flex: 1; }
-
-.score-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 4px;
-}
-
-.score-verdict {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
-  margin-bottom: 2px;
-}
-
-.score-verdict.exceptional { color: var(--blue); }
-.score-verdict.excellent   { color: #7C3AED; }
-.score-verdict.good        { color: var(--green); }
-.score-verdict.needswork   { color: #F59E0B; }
-
-.score-pct { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
-
-/* ─── METRIC BENTO ─── */
-.metric-bento {
-  padding: 16px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.metric-tile {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-inner);
-  padding: 16px;
-  transition: all 0.15s;
-}
-
-.metric-tile:hover {
-  border-color: var(--border-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-}
-
-.metric-name {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 8px;
-}
-
-.metric-val {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--blue);
-  letter-spacing: -0.03em;
-  line-height: 1;
-  margin-bottom: 10px;
-}
-
-.metric-bar-track {
-  height: 4px;
-  background: var(--surface-2);
-  border-radius: 2px;
+.metric-bar-bg {
+  height: 6px;
+  background: var(--bg);
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .metric-bar-fill {
   height: 100%;
-  background: var(--blue);
-  border-radius: 2px;
-  width: 0;
-  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  border-radius: 3px;
+  transition: width 1s ease-out;
 }
 
-/* ─── PROS / CONS ─── */
-.pros-cons { padding: 0 16px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-.pc-block { padding: 14px; border-radius: var(--radius-inner); }
-.pc-block.pros { background: var(--green-tint); }
-.pc-block.cons { background: var(--red-tint); }
-
-.pc-title {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.pc-title.green { color: var(--green); }
-.pc-title.red   { color: var(--red); }
-.pc-title svg   { width: 12px; height: 12px; }
-
-.pc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-
-.pc-list li {
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.pc-list.pro li { color: #065F46; }
-.pc-list.con li { color: #991B1B; }
-
-[data-theme="dark"] .pc-list.pro li { color: #6EE7B7; }
-[data-theme="dark"] .pc-list.con li { color: #FCA5A5; }
-
-/* ─── VERDICT ─── */
-.verdict-block {
-  margin: 0 16px 16px;
-  padding: 14px 16px;
-  background: var(--blue-tint);
-  border: 1px solid rgba(0,102,255,0.15);
-  border-radius: var(--radius-inner);
-}
-
-.verdict-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--blue);
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.verdict-label svg { width: 12px; height: 12px; }
-
-.verdict-text {
-  font-size: 13px;
+.confidence-pill {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 600;
   color: var(--text-secondary);
-  line-height: 1.6;
-  font-weight: 500;
+  margin-top: 4px;
 }
 
-/* ─── SUMMARY CARD ─── */
-.summary-card {
+/* Recommendations & Inline AI */
+.recommendations-panel {
+  grid-column: 1 / -1;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-solid);
   border-radius: var(--radius-outer);
   padding: 32px;
-  margin-bottom: 24px;
-  box-shadow: var(--shadow-sm);
+  margin-top: 8px;
 }
 
-.summary-card h3 {
+.rec-title {
   font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.summary-card h3 svg { color: var(--blue); width: 18px; height: 18px; }
-
-.diff-list { display: flex; flex-direction: column; gap: 10px; }
-
-.diff-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-inner);
-}
-
-.diff-num {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--blue);
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.diff-text {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.55;
-  font-weight: 500;
-}
-
-.diff-text strong { color: var(--text-primary); font-weight: 600; }
-
-/* ─── DETAILED ANALYSIS TOGGLE ─── */
-.toggle-detail-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-inner);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
   margin-bottom: 24px;
-}
-
-.toggle-detail-btn:hover { background: var(--surface-2); border-color: var(--border-dark); }
-.toggle-detail-btn svg { width: 14px; height: 14px; transition: transform 0.2s; }
-.toggle-detail-btn.open svg { transform: rotate(180deg); }
-
-/* ─── DEEP ANALYSIS ─── */
-.deep-analysis { display: none; margin-bottom: 32px; }
-.deep-analysis.active { display: block; }
-
-.thumb-section { margin-bottom: 40px; }
-
-.thumb-section-title {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid var(--blue);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.thumb-section-title svg { color: var(--blue); width: 20px; height: 20px; }
-
-.category-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-outer);
-  padding: 24px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
-}
-
-.category-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
-  letter-spacing: -0.01em;
 }
 
-.category-title svg { color: var(--blue); width: 16px; height: 16px; }
-
-.analysis-row {
+.rec-list {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.15s;
+  flex-direction: column;
+  gap: 16px;
 }
-
-.analysis-row:last-child { border-bottom: none; }
-
-.analysis-row:hover { background: var(--surface); margin: 0 -8px; padding: 10px 8px; border-radius: var(--radius-sm); }
-
-.ar-key {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  min-width: 140px;
-  flex-shrink: 0;
-  letter-spacing: -0.01em;
-  line-height: 1.4;
-  padding-top: 1px;
-}
-
-.ar-val {
-  font-size: 13px;
-  color: var(--text-primary);
-  line-height: 1.55;
-  font-weight: 500;
-}
-
-.rec-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
 
 .rec-item {
   display: flex;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 8px;
-  padding: 10px 12px;
-  background: var(--blue-tint);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  color: var(--text-primary);
-  font-weight: 500;
-  line-height: 1.5;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-inner);
+  gap: 16px;
 }
 
-.rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 5px; }
+.rec-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
 
-/* ─── TOAST ─── */
+.btn-regen {
+  background: rgba(0, 102, 255, 0.1);
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  color: var(--blue);
+  border-radius: var(--radius-inner);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-regen:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* ─── SKELETON LOADERS ─── */
+.skeleton-wrapper {
+  display: none;
+  margin-top: 64px;
+}
+
+.skeleton-wrapper.active { display: block; }
+
+.sk-bento {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+}
+
+.sk-box {
+  background: #111827; /* Dark Grey box */
+  border-radius: var(--radius-outer);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.sk-main { height: 400px; }
+.sk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.sk-card { height: 160px; border-radius: var(--radius-outer); }
+.sk-full { grid-column: 1 / -1; height: 200px; margin-top: 8px; }
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}
+
+/* ─── SUCCESS TOAST ─── */
 .toast {
   position: fixed;
   top: 24px;
   right: 24px;
-  z-index: 999;
+  z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 18px;
-  background: var(--text-primary);
-  color: var(--bg);
-  border-radius: var(--radius-inner);
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: var(--shadow-lg);
-  transform: translateX(calc(100% + 32px));
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-outer);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  transform: translateY(-100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.toast.show { transform: translateX(0); }
-.toast svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; }
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
 
-/* ─── FOOTER ─── */
+.toast-icon { color: #10B981; } /* Clean green success icon */
+.toast-text { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+/* ─── CLEAN FOOTER ─── */
 .footer {
-  border-top: 1px solid var(--border);
-  padding: 32px 24px;
   text-align: center;
-}
-
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  margin-top: 120px; /* 120px whitespace */
 }
 
 .footer-copy {
-  font-size: 13px;
-  color: var(--text-tertiary);
-  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-primary);
+  opacity: 0.4;
 }
 
-.footer-links { display: flex; gap: 20px; }
-
-.footer-link {
-  font-size: 13px;
-  color: var(--text-tertiary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.15s;
-}
-
-.footer-link:hover { color: var(--text-primary); }
-
-/* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
-  .header-nav { display: none; }
-  .main { padding: 32px 16px 64px; }
-  .hero h1 { font-size: 28px; }
-  .hero p { font-size: 15px; }
-  .comparison-grid { grid-template-columns: 1fr; }
-  .pros-cons { grid-template-columns: 1fr; }
-  .metric-bento { grid-template-columns: 1fr 1fr; }
-  .sk-bento { grid-template-columns: 1fr; }
-  .footer-inner { flex-direction: column; text-align: center; }
-  .footer-links { justify-content: center; }
-  .upload-footer { flex-direction: column; align-items: stretch; }
-  .upload-footer-hint { display: none; }
-  .analyze-btn { justify-content: center; }
-  .summary-card { padding: 20px; }
-  .ar-key { min-width: 110px; }
+  .bento-grid, .sk-bento { grid-template-columns: 1fr; }
+  .metrics-grid, .sk-grid { grid-template-columns: 1fr; }
+  .main { padding: 32px 16px 120px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ─── TOAST ─── -->
-<div class="toast" id="toast">
-  <i data-lucide="check-circle-2"></i>
-  Analysis Complete — Results are ready
-</div>
-
-<!-- ─── HEADER ─── -->
+<!-- HEADER -->
 <header class="header">
   <div class="header-inner">
     <a class="logo" href="#">
-      <div class="logo-icon">
-        <i data-lucide="image-play"></i>
-      </div>
+      <i data-lucide="zap" class="logo-icon"></i>
       <span class="logo-text">ThumbFast</span>
     </a>
-
-    <nav class="header-nav">
-      <a class="nav-link" href="#">History</a>
-      <a class="nav-link" href="#">Docs</a>
-      <a class="nav-link" href="#">Pricing</a>
-    </nav>
-
-    <div class="header-actions">
-      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
-        <i data-lucide="sun" id="themeIconLight"></i>
-        <i data-lucide="moon" id="themeIconDark" style="display:none"></i>
-      </button>
-      <div class="avatar">YT</div>
-    </div>
   </div>
 </header>
 
-<!-- ─── MAIN ─── -->
+<!-- MAIN APP -->
 <main class="main">
 
-  <!-- HERO -->
   <div class="hero">
-    <div class="hero-badge">
-      <i data-lucide="sparkles"></i>
-      AI-Powered • 3000+ Parameters
-    </div>
-    <h1>Analyze Your <span>Thumbnails</span>,<br>Maximize Your Clicks</h1>
-    <p>Upload up to 5 thumbnails and get a detailed comparison with AI-driven scores, metrics, and actionable improvements.</p>
+    <h1>Analysis Engine.</h1>
+    <p>Upload a thumbnail to decode its exact visual performance.</p>
   </div>
 
-  <!-- TOP AD -->
-  <div class="ad-strip" id="topAd">
-    <script>
-    atOptions={'key':'2faf98328ddba87ca7573f41c34973b4','format':'iframe','height':50,'width':320,'params':{}};
-    </script>
-    <script src="https://www.highperformanceformat.com/2faf98328ddba87ca7573f41c34973b4/invoke.js"></script>
-  </div>
-
-  <!-- UPLOAD CARD -->
-  <div class="upload-card" id="uploadCard">
-
-    <!-- DROP ZONE -->
-    <div class="drop-zone" id="dropZone">
-      <input type="file" id="fileInput" accept="image/*" multiple>
-      <div class="dz-inner">
-        <div class="dz-icon">
-          <i data-lucide="upload-cloud"></i>
-        </div>
-        <p class="dz-title">Drop your thumbnails here</p>
-        <p class="dz-sub">or <span id="browseLink">browse files</span> from your computer</p>
-        <div class="dz-limit">
-          <i data-lucide="info"></i>
-          Up to 5 images • JPG, PNG, WEBP
+  <div class="control-panel">
+    
+    <!-- Context Chips -->
+    <div class="context-section">
+      <div class="chip-group">
+        <span class="chip-label">Category</span>
+        <div class="chips" id="catChips">
+          <div class="chip active">Gaming</div>
+          <div class="chip">Education</div>
+          <div class="chip">Vlog</div>
+          <div class="chip">Tech</div>
         </div>
       </div>
     </div>
 
-    <!-- THUMBNAIL PREVIEW (shown after upload) -->
-    <div class="thumb-preview" id="thumbPreview">
-      <div class="thumb-preview-header">
-        <h3><i data-lucide="images"></i> Uploaded Thumbnails</h3>
-        <button class="clear-btn" id="clearAllBtn">Clear all</button>
+    <!-- Giant Prompt Box -->
+    <textarea class="prompt-box" id="targetAudience" placeholder="Define the target audience and core hook (e.g. 'Minecraft players looking for building tutorials')."></textarea>
+
+    <!-- Upload Area -->
+    <div class="upload-area" id="dropZone">
+      <input type="file" id="fileInput" accept="image/*">
+      <i data-lucide="upload" class="dz-icon"></i>
+      <div class="dz-title">Drop thumbnail here</div>
+      <div class="dz-sub">or click to browse local files</div>
+    </div>
+    
+    <div class="thumbs-preview" id="thumbPreview"></div>
+
+    <!-- Advanced Toggle -->
+    <div class="advanced-toggle">
+      <button class="adv-btn" id="advToggleBtn">
+        <i data-lucide="chevron-down"></i> Advanced Settings
+      </button>
+      <div class="adv-content" id="advContent">
+        <div class="adv-stat">
+          <span class="adv-stat-label">Model Version</span>
+          <span class="adv-stat-val">TF-Vision v3.2</span>
+        </div>
+        <div class="adv-stat">
+          <span class="adv-stat-label">Est. Token Cost</span>
+          <span class="adv-stat-val">~120 tkns</span>
+        </div>
       </div>
-      <div class="thumbs-grid" id="thumbsGrid"></div>
     </div>
 
-    <!-- VIDEO DETAILS (progressive disclosure) -->
-    <div class="video-details-section" id="videoDetailsSection">
-      <div class="field-label">
-        <i data-lucide="file-text"></i>
-        Video Details
-      </div>
-      <textarea
-        class="details-textarea"
-        id="videoDetails"
-        placeholder="Describe your video — title, topic, target audience, niche. The more context, the sharper the analysis."
-      ></textarea>
-    </div>
-
-    <!-- UPLOAD FOOTER -->
-    <div class="upload-footer">
-      <div class="upload-footer-hint">
-        <i data-lucide="lock"></i>
-        Images are never stored or shared
-      </div>
-      <button class="analyze-btn" id="analyzeBtn" disabled>
-        <i data-lucide="zap"></i>
-        Analyze Thumbnails
+    <div class="analyze-action">
+      <button class="btn-analyze" id="analyzeBtn" disabled>
+        <i data-lucide="cpu"></i> Analyze Context
       </button>
     </div>
-
   </div>
 
-  <!-- MIDDLE AD -->
-  <div class="ad-strip" id="midAd">
-    <script>
-    atOptions={'key':'2faf98328ddba87ca7573f41c34973b4','format':'iframe','height':50,'width':320,'params':{}};
-    </script>
-    <script src="https://www.highperformanceformat.com/2faf98328ddba87ca7573f41c34973b4/invoke.js"></script>
-  </div>
-
-  <!-- SKELETON LOADERS -->
-  <div class="skeleton-wrap" id="skeletonWrap">
-    <div class="skeleton-header">
-      <div class="sk sk-circle" style="width:40px;height:40px;flex-shrink:0"></div>
-      <div style="flex:1;display:flex;flex-direction:column;gap:8px">
-        <div class="sk sk-text" style="width:220px"></div>
-        <div class="sk sk-text-sm" style="width:160px"></div>
-      </div>
-    </div>
+  <!-- SKELETON LOADER -->
+  <div class="skeleton-wrapper" id="skeletonWrap">
     <div class="sk-bento">
-      <div class="sk-card">
-        <div class="sk sk-image"></div>
-        <div class="sk sk-text"></div>
-        <div class="sk sk-text-sm" style="width:70%"></div>
-        <div class="sk-grid-2">
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-        </div>
+      <div class="sk-box sk-main"></div>
+      <div class="sk-grid">
+        <div class="sk-box sk-card"></div>
+        <div class="sk-box sk-card"></div>
+        <div class="sk-box sk-card"></div>
+        <div class="sk-box sk-card"></div>
       </div>
-      <div class="sk-card">
-        <div class="sk sk-image"></div>
-        <div class="sk sk-text"></div>
-        <div class="sk sk-text-sm" style="width:70%"></div>
-        <div class="sk-grid-2">
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-          <div class="sk sk-text" style="height:64px;border-radius:8px"></div>
-        </div>
-      </div>
-    </div>
-    <div class="sk-card">
-      <div style="display:flex;gap:12px;align-items:center">
-        <div class="sk sk-text" style="width:180px;height:20px"></div>
-      </div>
-      <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
-        <div class="sk sk-text-sm" style="width:100%"></div>
-        <div class="sk sk-text-sm" style="width:88%"></div>
-        <div class="sk sk-text-sm" style="width:75%"></div>
-      </div>
+      <div class="sk-box sk-full"></div>
     </div>
   </div>
 
-  <!-- RESULTS -->
-  <div class="results-wrap" id="resultsWrap"></div>
+  <!-- RESULTS DASHBOARD -->
+  <div class="results-wrapper" id="resultsWrap">
+    <div class="bento-grid">
+      
+      <!-- Overall Score -->
+      <div class="score-card">
+        <img src="" id="resImg" class="score-image" alt="Thumbnail Analyzed">
+        <div class="score-circle" id="resScore">--</div>
+        <div class="score-label">Overall Effectiveness</div>
+        <div class="confidence-pill" style="margin-top: 16px;">99% Confident</div>
+      </div>
 
-  <!-- BOTTOM AD -->
-  <div class="ad-strip" id="bottomAd" style="display:none">
-    <script>
-    atOptions={'key':'2faf98328ddba87ca7573f41c34973b4','format':'iframe','height':50,'width':320,'params':{}};
-    </script>
-    <script src="https://www.highperformanceformat.com/2faf98328ddba87ca7573f41c34973b4/invoke.js"></script>
+      <!-- Metrics -->
+      <div class="metrics-grid">
+        
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Color Harmony</span>
+            <span class="metric-score" id="mColor">--</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="bColor" style="background: var(--chart-success); width: 0%;"></div>
+          </div>
+          <div class="confidence-pill" id="cColor">--</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Contrast & Depth</span>
+            <span class="metric-score" id="mContrast">--</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="bContrast" style="background: var(--chart-success); width: 0%;"></div>
+          </div>
+          <div class="confidence-pill" id="cContrast">--</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Text Readability</span>
+            <span class="metric-score" id="mText">--</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="bText" style="background: var(--chart-info); width: 0%;"></div>
+          </div>
+          <div class="confidence-pill" id="cText">--</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Clickability Focus</span>
+            <span class="metric-score" id="mClick">--</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="bClick" style="background: var(--chart-info); width: 0%;"></div>
+          </div>
+          <div class="confidence-pill" id="cClick">--</div>
+        </div>
+
+      </div>
+
+      <!-- Recommendations -->
+      <div class="recommendations-panel">
+        <div class="rec-title"><i data-lucide="sparkles"></i> AI Recommendations</div>
+        <div class="rec-list">
+          <div class="rec-item">
+            <span class="rec-text">The contrast between the foreground subject and background is slightly low. Increase background shadow to create depth.</span>
+            <button class="btn-regen"><i data-lucide="wand-2"></i> Re-generate with this tip</button>
+          </div>
+          <div class="rec-item">
+            <span class="rec-text">Text overlay occupies a dead zone on mobile screens. Shift typography up by 15% to avoid timeline overlay obstruction.</span>
+            <button class="btn-regen"><i data-lucide="wand-2"></i> Re-generate with this tip</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </main>
 
-<!-- ─── FOOTER ─── -->
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i data-lucide="check-circle-2" class="toast-icon"></i>
+  <span class="toast-text">Analysis Ready</span>
+</div>
+
+<!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-inner">
-    <span class="footer-copy">© 2025 ThumbFast — Grow Your Views with Better Thumbnails</span>
-    <div class="footer-links">
-      <a class="footer-link" href="#">Privacy</a>
-      <a class="footer-link" href="#">Terms</a>
-      <a class="footer-link" href="#">Support</a>
-    </div>
-  </div>
+  <div class="footer-copy">© 2026 ThumbFast</div>
 </footer>
 
 <script>
-// ─── INIT LUCIDE ───
-lucide.createIcons();
+  // Initialize Icons
+  lucide.createIcons();
 
-// ─── THEME TOGGLE ───
-const themeToggle  = document.getElementById('themeToggle');
-const themeIconL   = document.getElementById('themeIconLight');
-const themeIconD   = document.getElementById('themeIconDark');
-const html         = document.documentElement;
+  // Logic Setup
+  let uploadedFile = null;
 
-function applyTheme(dark) {
-  html.setAttribute('data-theme', dark ? 'dark' : 'light');
-  themeIconL.style.display = dark ? 'none'  : '';
-  themeIconD.style.display = dark ? ''      : 'none';
-}
+  // Chip Selection
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      e.target.classList.add('active');
+    });
+  });
 
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-applyTheme(prefersDark);
+  // Advanced Toggle
+  const advBtn = document.getElementById('advToggleBtn');
+  const advContent = document.getElementById('advContent');
+  advBtn.addEventListener('click', () => {
+    advBtn.classList.toggle('open');
+    advContent.classList.toggle('show');
+  });
 
-themeToggle.addEventListener('click', () => {
-  applyTheme(html.getAttribute('data-theme') !== 'dark');
-});
+  // Upload Logic
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const thumbPreview = document.getElementById('thumbPreview');
+  const analyzeBtn = document.getElementById('analyzeBtn');
 
-// ─── STATE ───
-let uploadedImages = [];
-let analysisCache  = {};
+  dropZone.addEventListener('click', () => fileInput.click());
+  
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+  
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
 
-// ─── DROP ZONE ───
-const dropZone   = document.getElementById('dropZone');
-const fileInput  = document.getElementById('fileInput');
-const browseLink = document.getElementById('browseLink');
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
 
-dropZone.addEventListener('click',     () => fileInput.click());
-browseLink.addEventListener('click',   (e) => { e.stopPropagation(); fileInput.click(); });
-dropZone.addEventListener('dragover',  (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
-dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('dragover'));
-dropZone.addEventListener('drop',      (e) => {
-  e.preventDefault();
-  dropZone.classList.remove('dragover');
-  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-  if (files.length) handleFiles(files);
-});
-fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleFiles(Array.from(e.target.files)); });
-document.getElementById('clearAllBtn').addEventListener('click', () => { uploadedImages = []; analysisCache = {}; refreshUI(); });
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) handleFile(e.target.files[0]);
+  });
 
-// ─── HANDLE FILES ───
-function handleFiles(files) {
-  const remaining = 5 - uploadedImages.length;
-  files.slice(0, remaining).forEach((file, i) => {
+  function handleFile(file) {
+    if (!file.type.startsWith('image/')) return;
+    
     const reader = new FileReader();
     reader.onload = (e) => {
-      uploadedImages.push({ id: Date.now() + i, src: e.target.result, name: file.name });
-      refreshUI();
+      uploadedFile = e.target.result;
+      
+      // Update UI preview
+      thumbPreview.innerHTML = `
+        <div class="thumb-mini">
+          <img src="${uploadedFile}">
+          <button class="remove" id="removeThumb"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+        </div>
+      `;
+      lucide.createIcons();
+      
+      document.getElementById('removeThumb').addEventListener('click', () => {
+        uploadedFile = null;
+        thumbPreview.innerHTML = '';
+        analyzeBtn.disabled = true;
+      });
+
+      analyzeBtn.disabled = false;
     };
     reader.readAsDataURL(file);
-  });
-}
-
-// ─── REFRESH UI ───
-function refreshUI() {
-  const hasThumbs = uploadedImages.length > 0;
-  const preview   = document.getElementById('thumbPreview');
-  const details   = document.getElementById('videoDetailsSection');
-  const grid      = document.getElementById('thumbsGrid');
-
-  preview.style.display = hasThumbs ? 'block' : 'none';
-  details.style.display = hasThumbs ? 'block' : 'none';
-  if (hasThumbs) { details.style.animation = 'none'; void details.offsetWidth; details.style.animation = ''; }
-
-  grid.innerHTML = '';
-  uploadedImages.forEach((img, i) => {
-    const el = document.createElement('div');
-    el.className = 'thumb-item';
-    el.innerHTML = `
-      <img src="${img.src}" alt="Thumbnail ${i + 1}">
-      <div class="thumb-item-footer">
-        <span class="thumb-label">Thumb ${i + 1}</span>
-        <button class="thumb-remove" data-id="${img.id}" title="Remove">
-          <i data-lucide="x"></i>
-        </button>
-      </div>
-    `;
-    grid.appendChild(el);
-  });
-
-  lucide.createIcons();
-
-  grid.querySelectorAll('.thumb-remove').forEach(btn => btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const id = parseInt(btn.getAttribute('data-id'));
-    uploadedImages = uploadedImages.filter(img => img.id !== id);
-    delete analysisCache[id];
-    refreshUI();
-  }));
-
-  checkReady();
-}
-
-document.getElementById('videoDetails').addEventListener('input', checkReady);
-
-function checkReady() {
-  const ok = uploadedImages.length > 0 && document.getElementById('videoDetails').value.trim().length > 5;
-  document.getElementById('analyzeBtn').disabled = !ok;
-}
-
-// ─── ANALYZE ───
-document.getElementById('analyzeBtn').addEventListener('click', runAnalysis);
-
-async function runAnalysis() {
-  document.getElementById('skeletonWrap').classList.add('active');
-  document.getElementById('resultsWrap').classList.remove('active');
-  document.getElementById('resultsWrap').innerHTML = '';
-  document.getElementById('bottomAd').style.display = 'none';
-  document.getElementById('analyzeBtn').disabled = true;
-
-  await new Promise(r => setTimeout(r, 3200));
-
-  const analyses = uploadedImages.map((img, i) => {
-    const key = hashStr(img.src);
-    if (!analysisCache[key]) analysisCache[key] = compute(img.src);
-    return { id: img.id, src: img.src, name: img.name, index: i, ...analysisCache[key] };
-  });
-
-  analyses.sort((a, b) => b.overallScore - a.overallScore);
-
-  document.getElementById('skeletonWrap').classList.remove('active');
-  buildResults(analyses);
-  document.getElementById('resultsWrap').classList.add('active');
-  document.getElementById('bottomAd').style.display = 'flex';
-  document.getElementById('analyzeBtn').disabled = false;
-  document.getElementById('resultsWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  showToast();
-  setTimeout(animateRings, 200);
-  setTimeout(animateBars, 300);
-}
-
-// ─── TOAST ───
-function showToast() {
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
-}
-
-// ─── HASH ───
-function hashStr(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; }
-  return Math.abs(h);
-}
-
-// ─── COMPUTE SCORES ───
-function compute(src) {
-  const h = hashStr(src);
-  const s = (n) => ((h * n) % 100) / 100;
-  const m = {
-    colorHarmony:    Math.floor(65 + s(7)  * 30),
-    contrast:        Math.floor(70 + s(13) * 25),
-    textReadability: Math.floor(75 + s(19) * 20),
-    emotionalImpact: Math.floor(60 + s(23) * 35),
-    faceDetection:   Math.floor(55 + s(29) * 40),
-    composition:     Math.floor(65 + s(31) * 30),
-    clickworthiness: Math.floor(63 + s(37) * 32),
-    brandConsistency:Math.floor(70 + s(41) * 25),
-  };
-  const score = Math.floor(Object.values(m).reduce((a, b) => a + b, 0) / 8);
-  return { overallScore: score, metrics: m, detail: buildDetail(m) };
-}
-
-function buildDetail(m) {
-  return {
-    color: {
-      icon: 'palette', title: 'Color Psychology & Theory',
-      rows: [
-        ['Primary Palette',           'Warm tones detected — high energy, attention-grabbing'],
-        ['Color Harmony',             `${m.colorHarmony}/100 — complementary usage detected`],
-        ['Contrast (BG vs FG)',        `${m.contrast}/100 — excellent foreground separation`],
-        ['Viewer Attention Zones',    'Hot zones in upper-left and center quadrants'],
-        ['Color Temperature',         'Balanced warm/cool ratio, optimised for engagement'],
-      ],
-      recs: ['Add a contrasting cool accent to balance warmth', 'Increase saturation in key focal area by ~12%'],
-    },
-    composition: {
-      icon: 'layout-template', title: 'Composition & Layout',
-      rows: [
-        ['Rule of Thirds',            `${m.composition}/100 — well-positioned elements`],
-        ['Visual Balance',            'Asymmetric — creates dynamic tension'],
-        ['Focal Point Clarity',       'Single clear focal point identified'],
-        ['Negative Space',            '35% — optimal breathing room'],
-        ['Element Hierarchy',         'Clear primary, secondary, tertiary ordering'],
-      ],
-      recs: ['Shift subject slightly right for stronger rule-of-thirds', 'Reduce background clutter in lower-right quadrant'],
-    },
-    text: {
-      icon: 'type', title: 'Text & Typography',
-      rows: [
-        ['Readability',               `${m.textReadability}/100 — highly legible`],
-        ['Font Weight',               'Bold — excellent for mobile viewing'],
-        ['Text-to-Image Ratio',       '~25% — optimal balance'],
-        ['Word Count',                '3–5 words — perfect for quick scanning'],
-        ['Outline / Shadow',          'Detected — improves contrast on varied backgrounds'],
-      ],
-      recs: ['Increase text size by ~10% for mobile below 400px', 'Add high-contrast stroke for improved legibility'],
-    },
-    psychology: {
-      icon: 'brain', title: 'Viewer Psychology',
-      rows: [
-        ['Emotional Response',        `${m.emotionalImpact}/100 — strong curiosity trigger`],
-        ['Human Element',             `${m.faceDetection}/100 — face or person detected`],
-        ['Expression Analysis',       'Surprise/excitement cues — high engagement potential'],
-        ['Eye Contact',               'Direct gaze — increases viewer connection'],
-        ['Curiosity Gap',             'Moderate — leaves questions unanswered'],
-      ],
-      recs: ['Enhance facial expression for stronger emotional pull', 'Introduce an unexpected visual detail to spike curiosity'],
-    },
-    technical: {
-      icon: 'settings-2', title: 'Technical Quality',
-      rows: [
-        ['Resolution',                '1920×1080 — full HD quality'],
-        ['Compression',               '92% quality — minimal artifacts'],
-        ['Sharpness',                 'High — crisp details throughout'],
-        ['Lighting',                  'Even illumination with natural falloff'],
-        ['Mobile Optimisation',       'Key elements legible at 120px preview size'],
-      ],
-      recs: ['Reduce file size for faster loading on slow connections', 'Verify text readability at sub-360px width'],
-    },
-    platform: {
-      icon: 'monitor-play', title: 'Platform Optimisation',
-      rows: [
-        ['YouTube CTR Potential',     `${m.clickworthiness}/100 — strong click-through rate`],
-        ['Mobile Display',            '88/100 — excellent small-screen visibility'],
-        ['Search Preview',            'Key elements survive small 3:2 crop'],
-        ['Suggested Video Sidebar',   'Thumbnail stands out in recommendation feed'],
-        ['Dark Mode',                 'High contrast maintained across light and dark UIs'],
-      ],
-      recs: ['Test in YouTube Search Results view before publishing', 'Check sidebar appearance against competitor thumbnails'],
-    },
-  };
-}
-
-// ─── BUILD RESULTS ───
-const metricNames = {
-  colorHarmony: 'Color', contrast: 'Contrast', textReadability: 'Text',
-  emotionalImpact: 'Emotion', faceDetection: 'Human', composition: 'Layout',
-  clickworthiness: 'CTR', brandConsistency: 'Brand',
-};
-
-function buildResults(analyses) {
-  const wrap = document.getElementById('resultsWrap');
-  wrap.innerHTML = '';
-
-  // Header
-  const hdr = document.createElement('div');
-  hdr.className = 'results-header';
-  hdr.innerHTML = `
-    <div>
-      <div class="results-title">${analyses.length > 1 ? '🏆 Comparison Results' : '📊 Analysis Results'}</div>
-      <div class="results-sub">
-        ${analyses.length > 1
-          ? `Thumbnail ${analyses[0].index + 1} is your strongest option with a score of ${analyses[0].overallScore}/100`
-          : `Your thumbnail scored ${analyses[0].overallScore}/100`}
-      </div>
-    </div>
-    <button class="retry-btn" id="retryBtn">
-      <i data-lucide="refresh-cw"></i>
-      Analyze again
-    </button>
-  `;
-  wrap.appendChild(hdr);
-
-  // Cards
-  const grid = document.createElement('div');
-  grid.className = 'comparison-grid';
-  analyses.forEach((a, r) => grid.appendChild(buildCard(a, r, analyses.length)));
-  wrap.appendChild(grid);
-
-  // Summary (multi)
-  if (analyses.length > 1) wrap.appendChild(buildSummary(analyses));
-
-  // Toggle deep analysis
-  const toggleBtn = document.createElement('button');
-  toggleBtn.className = 'toggle-detail-btn';
-  toggleBtn.id = 'toggleDeep';
-  toggleBtn.innerHTML = '<i data-lucide="chevron-down"></i> View Full 3000-Parameter Analysis';
-  wrap.appendChild(toggleBtn);
-
-  const deep = document.createElement('div');
-  deep.className = 'deep-analysis';
-  deep.id = 'deepAnalysis';
-  analyses.forEach(a => deep.appendChild(buildDeepSection(a)));
-  wrap.appendChild(deep);
-
-  lucide.createIcons();
-
-  toggleBtn.addEventListener('click', () => {
-    deep.classList.toggle('active');
-    toggleBtn.classList.toggle('open');
-    toggleBtn.innerHTML = deep.classList.contains('active')
-      ? '<i data-lucide="chevron-up"></i> Hide Full Analysis'
-      : '<i data-lucide="chevron-down"></i> View Full 3000-Parameter Analysis';
-    lucide.createIcons();
-    if (deep.classList.contains('active')) deep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
-
-  document.getElementById('retryBtn').addEventListener('click', () => {
-    document.getElementById('resultsWrap').classList.remove('active');
-    document.getElementById('resultsWrap').innerHTML = '';
-    document.getElementById('bottomAd').style.display = 'none';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
-
-// ─── RESULT CARD ───
-function buildCard(a, r, total) {
-  const card = document.createElement('div');
-  card.className = 'result-card' + (r === 0 && total > 1 ? ' winner' : '');
-
-  const rankLabel = total > 1
-    ? (r === 0 ? '🥇 1st Place' : r === 1 ? '🥈 2nd Place' : r === 2 ? '🥉 3rd Place' : `#${r + 1}`)
-    : 'Your Thumbnail';
-
-  const verdict  = getVerdict(a, r, total);
-  const vClass   = a.overallScore >= 90 ? 'exceptional' : a.overallScore >= 80 ? 'excellent' : a.overallScore >= 70 ? 'good' : 'needswork';
-  const vLabel   = a.overallScore >= 90 ? 'Exceptional' : a.overallScore >= 80 ? 'Excellent' : a.overallScore >= 70 ? 'Good' : 'Needs Work';
-  const circumf  = 2 * Math.PI * 30; // r=30
-  const offset   = circumf - (a.overallScore / 100) * circumf;
-
-  const pros = genPros(a);
-  const cons = genCons(a);
-
-  const metricsHTML = Object.entries(a.metrics).map(([k, v]) => `
-    <div class="metric-tile">
-      <div class="metric-name">${metricNames[k]}</div>
-      <div class="metric-val">${v}</div>
-      <div class="metric-bar-track">
-        <div class="metric-bar-fill" data-width="${v}"></div>
-      </div>
-    </div>
-  `).join('');
-
-  card.innerHTML = `
-    <div class="card-badges">
-      <div class="rank-badge">${rankLabel}</div>
-      ${r === 0 && total > 1 ? '<div class="winner-badge"><i data-lucide="star"></i> Best Pick</div>' : ''}
-    </div>
-    <div class="result-image-wrap">
-      <img src="${a.src}" class="result-image" alt="Thumbnail ${a.index + 1}">
-    </div>
-    <div class="score-block">
-      <div class="score-ring-wrap">
-        <svg class="score-ring-svg" viewBox="0 0 72 72">
-          <circle class="ring-track" cx="36" cy="36" r="30"/>
-          <circle class="ring-fill" cx="36" cy="36" r="30"
-            style="--offset:${offset}; stroke-dasharray:${circumf}; stroke-dashoffset:${circumf}"/>
-        </svg>
-        <div class="score-ring-num">${a.overallScore}</div>
-      </div>
-      <div class="score-info">
-        <div class="score-label">Overall Score</div>
-        <div class="score-verdict ${vClass}">${vLabel}</div>
-        <div class="score-pct">Beats ${Math.min(99, a.overallScore + 12)}% of thumbnails</div>
-      </div>
-    </div>
-    <div class="metric-bento">${metricsHTML}</div>
-    <div class="pros-cons">
-      <div class="pc-block pros">
-        <div class="pc-title green"><i data-lucide="check-circle-2"></i> Strengths</div>
-        <ul class="pc-list pro">${pros.map(p => `<li>${p}</li>`).join('')}</ul>
-      </div>
-      <div class="pc-block cons">
-        <div class="pc-title red"><i data-lucide="alert-circle"></i> Weaknesses</div>
-        <ul class="pc-list con">${cons.map(c => `<li>${c}</li>`).join('')}</ul>
-      </div>
-    </div>
-    <div class="verdict-block">
-      <div class="verdict-label"><i data-lucide="target"></i> Final Verdict</div>
-      <div class="verdict-text">${verdict}</div>
-    </div>
-  `;
-
-  return card;
-}
-
-// ─── SUMMARY CARD ───
-function buildSummary(analyses) {
-  const winner = analyses[0];
-  const top3   = Object.entries(winner.metrics).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => metricNames[k]).join(', ');
-
-  const items = analyses.slice(1).map(other => {
-    const diff   = winner.overallScore - other.overallScore;
-    const weakK  = Object.entries(other.metrics).sort((a, b) => a[1] - b[1])[0];
-    return `<div class="diff-item">
-      <div class="diff-num">${other.index + 1}</div>
-      <div class="diff-text">
-        <strong>Thumbnail ${other.index + 1}</strong> scores ${other.overallScore}/100 — ${diff} pts behind.
-        Main weakness: <strong>${metricNames[weakK[0]]}</strong> at ${weakK[1]}/100.
-      </div>
-    </div>`;
-  }).join('');
-
-  const card = document.createElement('div');
-  card.className = 'summary-card';
-  card.innerHTML = `
-    <h3><i data-lucide="bar-chart-3"></i> Head-to-Head Breakdown</h3>
-    <div class="diff-item" style="border-color:var(--blue);background:var(--blue-tint)">
-      <div class="diff-num" style="background:var(--blue)">✓</div>
-      <div class="diff-text">
-        <strong>Thumbnail ${winner.index + 1}</strong> wins at ${winner.overallScore}/100.
-        It leads in <strong>${top3}</strong>.
-        ${winner.overallScore >= 80
-          ? 'Ready to publish — strong CTR potential.'
-          : 'A strong contender, though the recommendations above will improve it further.'}
-      </div>
-    </div>
-    <div class="diff-list" style="margin-top:10px">${items}</div>
-  `;
-  return card;
-}
-
-// ─── DEEP ANALYSIS ───
-function buildDeepSection(a) {
-  const sec = document.createElement('div');
-  sec.className = 'thumb-section';
-  sec.innerHTML = `<div class="thumb-section-title"><i data-lucide="layers"></i> Thumbnail ${a.index + 1} — Full Report</div>`;
-
-  Object.values(a.detail).forEach(cat => {
-    const c = document.createElement('div');
-    c.className = 'category-card';
-    const rowsHTML = cat.rows.map(([k, v]) => `
-      <div class="analysis-row">
-        <div class="ar-key">${k}</div>
-        <div class="ar-val">${v}</div>
-      </div>
-    `).join('');
-    const recsHTML = cat.recs.map(r => `
-      <div class="rec-item"><div class="rec-dot"></div>${r}</div>
-    `).join('');
-    c.innerHTML = `
-      <div class="category-title"><i data-lucide="${cat.icon}"></i> ${cat.title}</div>
-      ${rowsHTML}
-      <div class="rec-list">${recsHTML}</div>
-    `;
-    sec.appendChild(c);
-  });
-
-  return sec;
-}
-
-// ─── ANIMATE RINGS ───
-function animateRings() {
-  document.querySelectorAll('.ring-fill').forEach(el => {
-    el.style.strokeDashoffset = el.style.getPropertyValue('--offset') || el.getAttribute('style').match(/--offset:([\d.]+)/)?.[1] || 0;
-  });
-}
-
-// ─── ANIMATE BARS ───
-function animateBars() {
-  document.querySelectorAll('.metric-bar-fill[data-width]').forEach(el => {
-    el.style.width = el.getAttribute('data-width') + '%';
-  });
-}
-
-// ─── PROS / CONS / VERDICT ───
-function genPros(a) {
-  const p = [], m = a.metrics;
-  if (m.colorHarmony    >= 80) p.push('Strong color harmony holds attention');
-  if (m.contrast        >= 80) p.push('High contrast pops in video feeds');
-  if (m.textReadability >= 85) p.push('Text is mobile-legible at small sizes');
-  if (m.emotionalImpact >= 75) p.push('Triggers emotional curiosity effectively');
-  if (m.faceDetection   >= 75) p.push('Human element drives viewer connection');
-  if (m.composition     >= 80) p.push('Clean, balanced composition');
-  if (m.clickworthiness >= 80) p.push('Creates urgency and curiosity gap');
-  if (m.brandConsistency>= 80) p.push('Consistent brand identity');
-  return p.length ? p.slice(0, 4) : ['Visual appeal present', 'Appropriate color scheme'];
-}
-
-function genCons(a) {
-  const c = [], m = a.metrics;
-  if (m.colorHarmony    < 70) c.push('Color palette feels unbalanced');
-  if (m.contrast        < 70) c.push('Low contrast — blends into feed');
-  if (m.textReadability < 75) c.push('Text too small or low contrast');
-  if (m.emotionalImpact < 65) c.push('Weak emotional hook');
-  if (m.faceDetection   < 60) c.push('No human element detected');
-  if (m.composition     < 70) c.push('Layout feels unbalanced');
-  if (m.clickworthiness < 70) c.push('Low curiosity gap — needs drama');
-  if (m.brandConsistency< 70) c.push('Brand identity inconsistent');
-  return c.length ? c.slice(0, 4) : ['Minor saturation tweaks recommended', 'Text positioning could be optimised'];
-}
-
-function getVerdict(a, r, total) {
-  if (total === 1) {
-    if (a.overallScore >= 85) return 'Excellent thumbnail — ready to publish. Minor improvements to the flagged areas could make it exceptional.';
-    if (a.overallScore >= 75) return 'Good thumbnail with clear strengths. Implement the recommendations to further boost CTR before publishing.';
-    if (a.overallScore >= 65) return 'Needs improvement. Address the flagged weaknesses before going live.';
-    return 'Significant rework required. Consider redesigning using these insights.';
   }
-  if (r === 0) return `Your strongest thumbnail. It outperforms the others in ${getTopMetrics(a.metrics)} and should deliver the highest click-through rate.`;
-  if (r === 1) return 'A solid alternative. Consider A/B testing this against the winner for different audience segments.';
-  return `This option trails in ${getBottomMetrics(a.metrics)} and needs more work before it's competitive.`;
-}
 
-function getTopMetrics(m)    { return Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => metricNames[k]).join(' & '); }
-function getBottomMetrics(m) { return Object.entries(m).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([k]) => metricNames[k]).join(' & '); }
+  // Analyze Action
+  analyzeBtn.addEventListener('click', () => {
+    if (!uploadedFile) return;
 
-// ─── FINAL LUCIDE INIT ───
-lucide.createIcons();
+    // Reset UI
+    document.getElementById('resultsWrap').classList.remove('active');
+    document.getElementById('skeletonWrap').classList.add('active');
+    analyzeBtn.disabled = true;
+
+    // Simulate 3000 parameter deep processing
+    setTimeout(() => {
+      document.getElementById('skeletonWrap').classList.remove('active');
+      
+      // Populate Data
+      document.getElementById('resImg').src = uploadedFile;
+      document.getElementById('resScore').innerText = '92';
+      
+      setMetric('Color', 95, 96);
+      setMetric('Contrast', 88, 92);
+      setMetric('Text', 82, 89);
+      setMetric('Click', 94, 98);
+
+      document.getElementById('resultsWrap').classList.add('active');
+      analyzeBtn.disabled = false;
+
+      showToast();
+      
+      // Scroll to results
+      document.getElementById('resultsWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    }, 2500);
+  });
+
+  function setMetric(id, score, conf) {
+    document.getElementById(`m${id}`).innerText = score;
+    document.getElementById(`c${id}`).innerText = `${conf}% Confident`;
+    
+    // Delayed bar fill for smooth OKLCH animation
+    setTimeout(() => {
+      document.getElementById(`b${id}`).style.width = `${score}%`;
+    }, 100);
+  }
+
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
 </script>
 </body>
 </html>
