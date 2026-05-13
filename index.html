@@ -101,14 +101,10 @@ body::after {
 .logo-name span { color:var(--blue); }
 
 .hdr-badge {
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px; color:var(--t3);
-  letter-spacing:.08em;
+  font-family:'Sora', -apple-system, sans-serif;
+  font-size:12px; font-weight:800; color:var(--t2);
+  letter-spacing:.05em; text-transform:uppercase;
 }
-
-/* ════════════════════════════════════════════════
-   PAGE
-════════════════════════════════════════════════ */
 .page { max-width:1140px; margin:0 auto; padding:52px 28px 80px; position:relative; z-index:1; }
 
 /* ════════════════════════════════════════════════
@@ -672,6 +668,8 @@ body::after {
 ════════════════════════════════════════════════ */
 @media (max-width:640px) {
 
+  .badge-desk { display:none; }
+
   .hdr { padding:0 16px; }
   .page { padding:28px 14px 60px; }
   .panel-body { padding:18px 18px 0; }
@@ -778,7 +776,7 @@ body::after {
       </div>
       <span class="logo-name">Thumb<span>Fast</span></span>
     </a>
-    <span class="hdr-badge">(4.0)</span>
+    <span class="hdr-badge"><span class="badge-desk">Vision Engine </span>(4.0)</span>
   </div>
 </header>
 
