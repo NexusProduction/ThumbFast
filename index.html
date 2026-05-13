@@ -482,10 +482,10 @@ body::after {
 .rank-bar.other  .rank-pill { color:var(--t3); background:var(--card3); border-color:var(--b0); }
 
 /* Card layout */
-.cbody { display:grid; grid-template-columns:270px 1fr; }
+.cbody { display:grid; grid-template-columns:300px 1fr; } /* Wider left column */
 
 .cleft {
-  padding:24px; border-right:1px solid var(--b0);
+  padding:28px 24px; border-right:1px solid var(--b0);
   background:var(--bg1);
   display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
 }
@@ -496,9 +496,10 @@ body::after {
 
 .cthumb {
   width:100%; aspect-ratio:16/9;
-  object-fit:cover; border-radius:10px;
-  border:1px solid var(--b1); margin-bottom:20px;
+  object-fit:cover; border-radius:12px;
+  border:1px solid var(--b1); margin-bottom:28px;
   display:block; transition:border-color .2s;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4); /* Added drop shadow */
 }
 .cthumb:hover { border-color:var(--blue); }
 
@@ -577,28 +578,23 @@ body::after {
 
 .mtile {
   background:var(--bg2);
-  border:2px solid var(--b2); /* Thicker, brighter stroke */
-  border-radius:12px; padding:14px 16px;
+  border:2px solid var(--b2); 
+  border-radius:12px; padding:20px 18px; /* Increased padding for cleaner look */
   transition: border-color .2s, transform .2s var(--spring);
+  display: flex; flex-direction: column; justify-content: center; gap: 12px;
 }
 .mtile:hover { border-color:var(--b2); transform:translateY(-1px); }
 
-.mrow { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
-.mname { font-size:12px; font-weight:600; color:var(--t1); }
-.mval  { font-size:20px; font-weight:800; color:var(--t1); font-variant-numeric:tabular-nums; line-height:1; }
+.mrow { display:flex; justify-content:space-between; align-items:baseline; }
+.mname { font-size:13px; font-weight:600; color:var(--t1); }
+.mval  { font-size:22px; font-weight:800; color:var(--t1); font-variant-numeric:tabular-nums; line-height:1; }
 
-.mtrack { height:3px; background:var(--card3); border-radius:2px; overflow:hidden; }
+.mtrack { height:4px; background:var(--card3); border-radius:2px; overflow:hidden; }
 .mfill  { height:100%; border-radius:2px; transition:width .9s var(--ease); }
 .mf-ex { background:linear-gradient(90deg,var(--green),#5EF890); }
 .mf-go { background:linear-gradient(90deg,var(--blue),var(--cyan)); }
 .mf-av { background:linear-gradient(90deg,var(--amber),#FFE94D); }
 .mf-po { background:linear-gradient(90deg,var(--red),#FF7B73); }
-
-.msub {
-  font-family:'JetBrains Mono',monospace;
-  font-size:9px; color:var(--t3);
-  margin-top:7px; letter-spacing:.04em;
-}
 
 /* ════════════════════════════════════════════════
    MOBILE COLLAPSIBLE METRICS
@@ -1223,11 +1219,9 @@ function buildCard(img,res,idx,multi){
   const mHtml=ms.map(m=>{
     const v=sc6[m.k]||0;
     const fc=v>=85?'mf-ex':v>=70?'mf-go':v>=55?'mf-av':'mf-po';
-    const sl=v>=85?'✓ STRONG':v>=70?'~ GOOD':v>=55?'⚠ NEEDS WORK':'✗ WEAK';
     return`<div class="mtile">
       <div class="mrow"><span class="mname">${m.l}</span><span class="mval">${v}</span></div>
       <div class="mtrack"><div class="mfill ${fc}" style="width:${v}%"></div></div>
-      <div class="msub">${sl}</div>
     </div>`;
   }).join('');
 
