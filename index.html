@@ -446,7 +446,7 @@ body::after {
 ════════════════════════════════════════════════ */
 .rcard {
   background:var(--card);
-  border:1px solid var(--b0);
+  border:2px solid var(--b1); /* Thicker, brighter stroke */
   border-radius:20px; overflow:hidden;
   margin-bottom:18px;
   box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 20px 60px rgba(0,0,0,.5);
@@ -521,9 +521,15 @@ body::after {
     var(--blue) 144deg 180deg,
     transparent 180deg
   );
-  -webkit-mask:radial-gradient(circle at 50% 100%, transparent 72%, black 73%);
-  mask:radial-gradient(circle at 50% 100%, transparent 72%, black 73%);
-  opacity: 1;
+}
+/* Bulletproof inner cutout overlay instead of CSS masks */
+.gauge-bg::after {
+  content:'';
+  position:absolute; bottom:0; left:50%;
+  width:160px; height:80px;
+  margin-left:-80px;
+  border-radius:80px 80px 0 0;
+  background:var(--bg1); /* Matches the background of the left container */
 }
 .gauge-needle {
   position:absolute; bottom:20px; left:50%;
@@ -571,7 +577,7 @@ body::after {
 
 .mtile {
   background:var(--bg2);
-  border:1.5px solid var(--b1);
+  border:2px solid var(--b2); /* Thicker, brighter stroke */
   border-radius:12px; padding:14px 16px;
   transition: border-color .2s, transform .2s var(--spring);
 }
