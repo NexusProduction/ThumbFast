@@ -1,0 +1,15 @@
+{
+  "name": "ThumbFast",
+  "short_name": "ThumbFast",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#0A84FF",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230A84FF' stroke='%23ffffff' stroke-width='1.5'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
