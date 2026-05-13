@@ -1088,28 +1088,104 @@ function pxAnalyze(url){
   });
 }
 
-/* ─ Claude API ─ */
 async function claudeAnalyze(imgObj,vc){
   const b64=imgObj.url.split(',')[1];
   const mime=imgObj.url.match(/data:([^;]+);/)[1];
-  const sys=`You are an expert YouTube thumbnail analyst. Return ONLY raw JSON (no markdown):
-{"scores":{"colorHarmony":<0-100>,"contrastDepth":<0-100>,"textReadability":<0-100>,"emotionalImpact":<0-100>,"clickability":<0-100>,"visualHierarchy":<0-100>},"overall":<0-100>,"verdict":"<EXCELLENT|GOOD|AVERAGE|POOR>","recommendations":[{"priority":"<HIGH|MED|LOW>","action":"<specific>"},{"priority":"<HIGH|MED|LOW>","action":"<specific>"},{"priority":"<HIGH|MED|LOW>","action":"<specific>"}],"audienceReaction":"<1 sentence>"}`;
+
+  const sys=`You are a senior YouTube thumbnail optimization expert with 10+ years of CTR analysis. You have deep expertise in visual psychology, color theory, typography, and what makes viewers click.
+
+Your task: perform a rigorous visual analysis of the uploaded thumbnail image. You MUST look at every pixel detail carefully — colors present, faces, text, contrast, composition, focal point, emotional expression.
+
+SCORING RUBRIC (be strict and realistic — most thumbnails score 55-80):
+
+colorHarmony (0-100):
+  90-100: Masterful palette, colors guide the eye perfectly, professional color grading
+  70-89:  Good palette, minor color clashes, decent visual flow
+  50-69:  Flat or muddy colors, no clear palette strategy
+  0-49:   Clashing colors, hard to look at, poor saturation
+
+contrastDepth (0-100):
+  90-100: Perfect contrast ratio, subject pops dramatically from background
+  70-89:  Good contrast but some areas compete visually
+  50-69:  Low contrast, subject blends into background
+  0-49:   No contrast, flat image, subject invisible
+
+textReadability (0-100):
+  90-100: Bold text, high contrast, readable at thumbnail size (120x90px)
+  70-89:  Text visible but could be bolder/larger
+  50-69:  Text hard to read, poor font choice or contrast
+  0-49:   Text illegible at small sizes, or no strategic text
+  N/A if no text: score 50 as neutral
+
+emotionalImpact (0-100):
+  90-100: Powerful emotion, shock/curiosity/desire, face expression is intense
+  70-89:  Clear emotion, engages viewer
+  50-69:  Mild emotion, forgettable
+  0-49:   No emotional hook whatsoever
+
+clickability (0-100):
+  90-100: Irresistible click trigger, creates strong curiosity gap
+  70-89:  Reasonably clickable, clear value proposition
+  50-69:  Unclear why to click
+  0-49:   No reason to click, boring
+
+visualHierarchy (0-100):
+  90-100: Perfect flow: eye lands on subject → reads text → understands message in <1 second
+  70-89:  Good hierarchy with minor confusion
+  50-69:  Competing focal points, no clear reading order
+  0-49:   Chaotic, eye doesn't know where to go
+
+overall: Weighted average — clickability (30%) + emotionalImpact (25%) + visualHierarchy (20%) + contrastDepth (15%) + colorHarmony (5%) + textReadability (5%)
+
+verdict:
+  EXCELLENT: overall >= 82
+  GOOD:      overall >= 65
+  AVERAGE:   overall >= 48
+  POOR:      overall < 48
+
+Return ONLY a raw JSON object. No markdown, no explanation, no text before or after. Exactly this structure:
+{"scores":{"colorHarmony":<integer>,"contrastDepth":<integer>,"textReadability":<integer>,"emotionalImpact":<integer>,"clickability":<integer>,"visualHierarchy":<integer>},"overall":<integer>,"verdict":"<EXCELLENT|GOOD|AVERAGE|POOR>","recommendations":[{"priority":"HIGH","action":"<ultra-specific action — name the exact color, font, element, position you are referring to>"},{"priority":"MED","action":"<specific action>"},{"priority":"LOW","action":"<specific action>"}],"audienceReaction":"<1 sentence describing the exact emotional reaction a viewer will feel in the first 300ms of seeing this thumbnail>","visualDescription":"<2 sentences: describe exactly what you see — colors, faces, text, layout, background>"}`;
+
+  const userMsg=`Carefully examine every visual detail of this thumbnail image.
+
+Video context: "${vc}"
+
+Step 1 — Look at the image carefully. Identify:
+- Dominant colors (name them: e.g. "deep navy blue background", "bright orange text")
+- Faces present? Expression? (e.g. "shocked male face, mouth open, eyes wide")
+- Text visible? Font weight? Contrast? (e.g. "white bold Impact font on dark background")
+- Subject placement and size relative to frame
+- Background: busy, clean, gradient, photo?
+- Overall composition: centered, rule of thirds, chaotic?
+
+Step 2 — Score each dimension strictly based on what you actually see.
+
+Step 3 — Give 3 recommendations so specific they could be actioned immediately (e.g. "Increase font size of the word 'HACK' from ~28px to 52px and add a 2px black stroke outline to improve readability at 120px thumbnail width").
+
+Return raw JSON only.`;
+
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1600,
+        system:sys,
         messages:[{role:'user',content:[
           {type:'image',source:{type:'base64',media_type:mime,data:b64}},
-          {type:'text',text:`Analyze this thumbnail. Video: "${vc}". Name specific colors, fonts, elements.`}
+          {type:'text',text:userMsg}
         ]}]
       })
     });
     const d=await r.json();
     const raw=d.content?.find(c=>c.type==='text')?.text||'{}';
-    return JSON.parse(raw.replace(/```json|```/g,'').trim());
-  }catch(e){console.warn('Claude fallback:',e);return null;}
+    const clean=raw.replace(/^[\s\S]*?(\{)/,'$1').replace(/\}[\s\S]*$/,'}');
+    return JSON.parse(clean);
+  }catch(e){
+    console.warn('Claude API error:',e);
+    return null;
+  }
 }
 
 /* ─ pixel fallback ─ */
