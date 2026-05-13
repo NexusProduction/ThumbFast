@@ -513,7 +513,7 @@ body::after {
   position:absolute; top:0; left:0;
   width:220px; height:110px;
   border-radius:110px 110px 0 0;
-  background:conic-gradient(from 270deg,
+  background:conic-gradient(from 270deg at 50% 100%,
     var(--red) 0deg 36deg,
     #FF9F0A 36deg 72deg,
     var(--amber) 72deg 108deg,
@@ -521,9 +521,9 @@ body::after {
     var(--blue) 144deg 180deg,
     transparent 180deg
   );
-  -webkit-mask:radial-gradient(circle at bottom center, transparent 72%, black 73%);
-  mask:radial-gradient(circle at bottom center, transparent 72%, black 73%);
-  opacity: 0.85;
+  -webkit-mask:radial-gradient(circle at 50% 100%, transparent 72%, black 73%);
+  mask:radial-gradient(circle at 50% 100%, transparent 72%, black 73%);
+  opacity: 1;
 }
 .gauge-needle {
   position:absolute; bottom:20px; left:50%;
