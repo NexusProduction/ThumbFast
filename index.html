@@ -503,53 +503,52 @@ body::after {
 .cthumb:hover { border-color:var(--blue); }
 
 /* ════════════════════════════════════════════════
-   METER GAUGE
+   METER GAUGE REDESIGN
 ════════════════════════════════════════════════ */
 .gauge-wrap {
-  position:relative; width:200px; height:140px;
-  margin:10px auto 0;
+  position:relative; width:220px; height:130px;
+  margin:0 auto;
 }
 .gauge-bg {
   position:absolute; top:0; left:0;
-  width:200px; height:100px;
-  border-radius:100px 100px 0 0; overflow:hidden;
-}
-.gauge-bg::before {
-  content:''; position:absolute; top:0; left:0;
-  width:200px; height:200px; border-radius:50%;
+  width:220px; height:110px;
+  border-radius:110px 110px 0 0;
   background:conic-gradient(from 270deg,
     var(--red) 0deg 36deg,
     #FF9F0A 36deg 72deg,
     var(--amber) 72deg 108deg,
     #32D74B 108deg 144deg,
     var(--blue) 144deg 180deg,
-    transparent 180deg 360deg
+    transparent 180deg
   );
-  -webkit-mask:radial-gradient(transparent 55%, black 56%);
-  mask:radial-gradient(transparent 55%, black 56%);
+  -webkit-mask:radial-gradient(circle at bottom center, transparent 72%, black 73%);
+  mask:radial-gradient(circle at bottom center, transparent 72%, black 73%);
+  opacity: 0.85;
 }
 .gauge-needle {
-  position:absolute; top:20px; left:50%;
-  width:6px; height:80px; background:#fff;
-  transform-origin:bottom center; margin-left:-3px;
-  border-radius:6px; box-shadow:0 0 10px rgba(0,0,0,0.5);
-  z-index:2;
+  position:absolute; bottom:20px; left:50%;
+  width:4px; height:85px; background:var(--t1);
+  transform-origin:bottom center; margin-left:-2px;
+  border-radius:4px;
   transform:rotate(-90deg);
   animation:sweep 1.2s cubic-bezier(.34,1.56,.64,1) forwards;
-  animation-delay:0.1s;
+  z-index:2;
 }
 @keyframes sweep { to { transform:rotate(var(--rot)); } }
 .gauge-hub {
-  position:absolute; top:90px; left:50%;
-  width:20px; height:20px; border-radius:50%;
-  background:#fff; transform:translateX(-50%);
-  box-shadow:0 0 10px rgba(0,0,0,0.5); z-index:3;
+  position:absolute; bottom:14px; left:50%;
+  width:12px; height:12px; border-radius:50%;
+  background:var(--t1); transform:translateX(-50%);
+  z-index:3;
 }
 .gauge-val {
-  position:absolute; top:116px; width:100%;
-  text-align:center; font-size:22px; font-weight:800;
-  letter-spacing:.05em; text-shadow:0 2px 10px rgba(0,0,0,0.5);
+  position:relative; top:58px;
+  display:flex; flex-direction:column; align-items:center;
+  animation: fadeUp .6s ease forwards; animation-delay: .3s; opacity:0;
 }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.gauge-score { font-size:46px; font-weight:800; color:var(--t1); line-height:1; }
+.gauge-label { font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-top:6px; }
 
 .reaction {
   margin-top:14px; font-size:11px; color:var(--t2);
@@ -712,32 +711,39 @@ body::after {
     padding:28px 20px; flex-direction:column; gap:18px;
     align-items:center; justify-content:center; text-align:center;
   }
-  .cthumb { width:100%; max-width:280px; height:auto; margin-bottom:0; flex-shrink:0; }
+  .cthumb { width:100%; max-width:100%; height:auto; margin-bottom:0; flex-shrink:0; border-radius:12px; }
   .cleft-info { display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%; }
 
   .cright { padding:16px; gap:16px; }
   .mgrid  { grid-template-columns:1fr 1fr; gap:8px; }
 
-  /* Collapse metrics — show 2, hide rest behind blur */
+  /* Collapse metrics — smoothly expand using max-height */
   .metrics-collapse { position:relative; }
-
-  .metrics-collapse .mgrid .mtile:nth-child(n+3) {
-    display:none;
+  
+  .metrics-collapse .mgrid {
+    overflow: hidden;
+    max-height: 84px; /* Perfectly cuts off after 1 row of tiles */
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .metrics-collapse.expanded .mgrid .mtile:nth-child(n+3) {
-    display:block;
+  
+  .metrics-collapse.expanded .mgrid {
+    max-height: 500px; /* Expands smoothly to show all tiles */
   }
 
-  /* blur overlay */
+  /* Animated blur overlay */
   .metrics-collapse::after {
     content:'';
-    position:absolute; bottom:0; left:0; right:0;
-    height:60px;
+    position:absolute; bottom:42px; /* Position right above button */
+    left:0; right:0; height:60px;
     background:linear-gradient(to bottom, transparent, var(--card));
     pointer-events:none;
-    transition:opacity .3s;
+    opacity: 1;
+    transition: opacity 0.4s ease;
   }
-  .metrics-collapse.expanded::after { display:none; }
+  
+  .metrics-collapse.expanded::after { 
+    opacity: 0; 
+  }
 
   .metrics-more-btn { display:flex; position:relative; z-index:2; }
 
@@ -1235,7 +1241,10 @@ function buildCard(img,res,idx,multi){
             <div class="gauge-bg"></div>
             <div class="gauge-needle" style="--rot: ${ov * 1.8 - 90}deg"></div>
             <div class="gauge-hub"></div>
-            <div class="gauge-val" style="color:${meterColor}">${meterRank}</div>
+            <div class="gauge-val">
+              <div class="gauge-score">${ov}</div>
+              <div class="gauge-label" style="color:${meterColor}">${meterRank}</div>
+            </div>
           </div>
           ${reaction?`<div class="reaction">${esc(reaction)}</div>`:''}
         </div>
