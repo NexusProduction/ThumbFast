@@ -18,9 +18,9 @@
   --card:      #161618;
   --card2:     #1c1c1f;
   --card3:     #242428;
-  --b0:        rgba(255,255,255,0.06);
-  --b1:        rgba(255,255,255,0.10);
-  --b2:        rgba(255,255,255,0.16);
+   --b0:        rgba(255,255,255,0.15);
+  --b1:        rgba(255,255,255,0.25);
+  --b2:        rgba(255,255,255,0.40);
 
   --blue:      #0A84FF;
   --blue-d:    rgba(10,132,255,0.14);
@@ -35,9 +35,9 @@
 
   /* ALL TEXT WHITE */
   --t1: #ffffff;
-  --t2: rgba(255,255,255,0.72);
-  --t3: rgba(255,255,255,0.42);
-  --t4: rgba(255,255,255,0.20);
+  --t2: rgba(255,255,255,0.90);
+  --t3: rgba(255,255,255,0.70);
+  --t4: rgba(255,255,255,0.45);
 
   --ease:   cubic-bezier(.4,0,.2,1);
   --spring: cubic-bezier(.34,1.56,.64,1);
@@ -550,7 +550,7 @@ body::after {
 
 .mtile {
   background:var(--bg2);
-  border:1px solid var(--b0);
+  border:1.5px solid var(--b1);
   border-radius:12px; padding:14px 16px;
   transition: border-color .2s, transform .2s var(--spring);
 }
@@ -674,20 +674,25 @@ body::after {
 
   /* 5 images */
   .pgrid.c5 { grid-template-columns:1fr 1fr; }
-  .pgrid.c5 .pcard:nth-child(5) { grid-column: span 2; }
+  .pgrid.c5 .pcard:nth-child(5) { 
+    grid-column: span 2; 
+    max-width: calc(50% - 5px); 
+    margin: 0 auto; 
+    width: 100%; 
+  }
   /* last 2 items span to center — use negative margin trick via JS class instead */
 
   /* Results card on phone */
   .cbody { grid-template-columns:1fr; }
- .cleft {
+  .cleft {
     border-right:none;
     border-bottom:1px solid var(--b0);
-    padding:12px; flex-direction:row; gap:12px;
-    align-items:center;
+    padding:20px; flex-direction:column; gap:16px;
+    align-items:center; text-align:center;
   }
-  .cthumb { width:120px; height:auto; margin-bottom:0; flex-shrink:0; }
-  .score-num { font-size:48px; }
-  .cleft-info { display:flex; flex-direction:column; justify-content:center; padding-top:4px; }
+  .cthumb { width:100%; max-width:260px; height:auto; margin-bottom:0; flex-shrink:0; }
+  .score-num { font-size:64px; }
+  .cleft-info { display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%; }
 
   .cright { padding:16px; gap:16px; }
   .mgrid  { grid-template-columns:1fr 1fr; gap:8px; }
