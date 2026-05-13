@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ThumbFast — AI Thumbnail Intelligence</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230A84FF' stroke='%23ffffff' stroke-width='1.5'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/></svg>">
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -564,9 +566,9 @@ body::after {
 
 .sec-label {
   font-family:'JetBrains Mono',monospace;
-  font-size:9px; color:var(--t3);
-  letter-spacing:.12em; text-transform:uppercase;
-  margin-bottom:12px;
+  font-size:11px; font-weight:700; color:var(--t2); /* Larger, bolder, and brighter */
+  letter-spacing:.15em; text-transform:uppercase;
+  margin-bottom:16px;
 }
 
 /* Metrics grid */
@@ -1369,6 +1371,13 @@ function resetApp(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 window.resetApp=resetApp;
+
+/* ─ PWA / URL Bar Install Support ─ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
