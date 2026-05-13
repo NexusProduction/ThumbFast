@@ -276,11 +276,7 @@ body::after {
 
 /* Desktop: always 5 cols */
 .pgrid { grid-template-columns: repeat(5, 1fr); }
-
-/* JS adds these classes based on count — used on mobile */
-.pgrid.c1 { grid-template-columns: 1fr; }
-.pgrid.c2 { grid-template-columns: 1fr 1fr; }
-/* c3,c4,c5 handled with nth-child on mobile below */
+/* Mobile column definitions handled in media query below */
 
 .pcard {
   position:relative;
@@ -680,11 +676,13 @@ body::after {
   .res-header { flex-direction:column; gap:10px; }
   .res-header .btn-g { align-self:flex-start; }
 
-  /* 1 image — full width */
+/* 1 image */
   .pgrid.c1 { grid-template-columns:1fr; }
+  .pgrid.c1 .pempty { display: none; }
 
-  /* 2 images — side by side */
+  /* 2 images */
   .pgrid.c2 { grid-template-columns:1fr 1fr; }
+  .pgrid.c2 .pempty { display: none; }
 
   /* 3 images */
   .pgrid.c3 { grid-template-columns:1fr 1fr; }
